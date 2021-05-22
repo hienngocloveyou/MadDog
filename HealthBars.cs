@@ -15,19 +15,16 @@ namespace HealthBars
 {
     public class HealthBars : BaseSettingsPlugin<HealthBarsSettings>
     {
-        private Camera camera;
-        private bool CanTick = true;
-        private readonly List<Element> ElementForSkip = new List<Element>();
-        private string IGNORE_FILE { get; } = Path.Combine("config", "ignored_entities.txt");
+        private string IgnoreFile => Path.Combine("config", "ignored_entities.txt");
         private List<string> IgnoredEntities { get; set; }
-
-        private IngameUIElements ingameUI;
-        private CachedValue<bool> ingameUICheckVisible;
-        private Vector2 oldplayerCord;
-        private Entity Player;
-        private HealthBar PlayerBar;
-        private RectangleF windowRectangle;
-        private Size2F windowSize;
+        private Camera Camera => GameController.Game.IngameState.Camera;
+        private IngameUIElements IngameUi { get; set; }
+        private CachedValue<bool> IngameUiCheckVisible { get; set; }
+        private Vector2 OldPlayerHealthbarPosition { get; set; }
+        private Entity Player { get; set; }
+        private HealthBar PlayerBar { get; set; }
+        private RectangleF WindowRectangle { get; set; }
+        private Size2F WindowSize { get; set; }
 
         public override void OnLoad()
         {
@@ -38,7 +35,7 @@ namespace HealthBars
         public override bool Initialise()
         {
             Player = GameController.Player;
-            ingameUI = GameController.IngameState.IngameUi;
+            IngameUi = GameController.IngameState.IngameUi;
             PlayerBar = new HealthBar(Player, Settings);
 
             GameController.EntityListWrapper.PlayerUpdate += (sender, args) =>
@@ -48,16 +45,19 @@ namespace HealthBars
                 PlayerBar = new HealthBar(Player, Settings);
             };
 
-            ingameUICheckVisible = new TimeCache<bool>(() =>
+            IngameUiCheckVisible = new TimeCache<bool>(() =>
             {
-                windowRectangle = GameController.Window.GetWindowRectangleReal();
-                windowSize = new Size2F(windowRectangle.Width / 2560, windowRectangle.Height / 1600);
-                camera = GameController.Game.IngameState.Camera;
+                WindowRectangle = GameController.Window.GetWindowRectangleReal();
+                WindowSize = new Size2F(WindowRectangle.Width / 1920, WindowRectangle.Height / 1080);
 
-                return ingameUI.BetrayalWindow.IsVisibleLocal || ingameUI.SellWindow.IsVisibleLocal ||
-                       ingameUI.DelveWindow.IsVisibleLocal || ingameUI.IncursionWindow.IsVisibleLocal ||
-                       ingameUI.UnveilWindow.IsVisibleLocal || ingameUI.TreePanel.IsVisibleLocal || ingameUI.AtlasPanel.IsVisibleLocal ||
-                       ingameUI.CraftBench.IsVisibleLocal;
+                return IngameUi.BetrayalWindow.IsVisibleLocal 
+                       || IngameUi.SellWindow.IsVisibleLocal 
+                       || IngameUi.DelveWindow.IsVisibleLocal 
+                       || IngameUi.IncursionWindow.IsVisibleLocal 
+                       || IngameUi.UnveilWindow.IsVisibleLocal 
+                       || IngameUi.TreePanel.IsVisibleLocal 
+                       || IngameUi.Atlas.IsVisibleLocal 
+                       || IngameUi.CraftBench.IsVisibleLocal;
             }, 250);
             ReadIgnoreFile();
 
@@ -66,7 +66,7 @@ namespace HealthBars
 
         private void ReadIgnoreFile()
         {
-            var path = Path.Combine(DirectoryFullName, IGNORE_FILE);
+            var path = Path.Combine(DirectoryFullName, IgnoreFile);
             if (File.Exists(path))
             {
                 IgnoredEntities = File.ReadAllLines(path).Where(line => !string.IsNullOrWhiteSpace(line) && !line.StartsWith("#")).ToList();
@@ -79,187 +79,150 @@ namespace HealthBars
 
         public override void AreaChange(AreaInstance area)
         {
-            ingameUI = GameController.IngameState.IngameUi;
+            IngameUi = GameController.IngameState.IngameUi;
             ReadIgnoreFile();
+        }
+
+        public override Job Tick()
+        {
+            return !ShouldRun() ? null : new Job(nameof(HealthBars), AddHealthBarComponents);
+        }
+
+        public override void Render()
+        {
+            if (!ShouldRun()) return;
+
+            // own player
+            if (Settings.SelfHealthBarShow != null && Settings.SelfHealthBarShow)
+            {
+                var playerBar = Player.GetHudComponent<HealthBar>();
+
+                // if this check is not done the player health bar is jiggling around
+                var location = playerBar.BackGround.Location;
+                if (Math.Abs(OldPlayerHealthbarPosition.X - location.X) < 50
+                    || Math.Abs(OldPlayerHealthbarPosition.Y - location.Y) < 50)
+                {
+                    playerBar.BackGround = new RectangleF(
+                        OldPlayerHealthbarPosition.X,
+                        OldPlayerHealthbarPosition.Y,
+                        playerBar.BackGround.Width,
+                        playerBar.BackGround.Height);
+                }
+                OldPlayerHealthbarPosition = playerBar.BackGround.Location;
+
+                DrawBar(playerBar);
+            }
+
+            // other entities
+            foreach (var idEntityPair in GameController.EntityListWrapper.EntityCache)
+            {
+                var entity = idEntityPair.Value;
+                if (!IsEntityRelevant(entity)) continue;
+                if (entity.Address == Player.Address) continue;
+
+                var healthBar = entity.GetHudComponent<HealthBar>();
+                if (healthBar?.Skip != false) continue;
+
+                DrawBar(healthBar);
+            }
+        }
+
+        private bool ShouldRun()
+        {
+            if (IngameUiCheckVisible.Value) return false;
+            if (Camera == null) return false;
+            if (GameController.Area.CurrentArea.IsTown && !Settings.ShowInTown) return false;
+
+            return true;
+        }
+
+        private void AddHealthBarComponents()
+        {
+            try
+            {
+                foreach (var idEntityPair in GameController.EntityListWrapper.EntityCache)
+                {
+                    var entity = idEntityPair.Value;
+                    if (!IsEntityRelevant(entity)) continue;
+
+                    AddHealthBarComponent(entity);
+                }
+                AddHealthBarComponent(Player);
+            }
+            catch (Exception e)
+            {
+                DebugWindow.LogError($"HealthBars.AddHealthBarComponents -> {e.Message}");
+            }
+        }
+
+        private void AddHealthBarComponent(Entity entity)
+        {
+            if (entity == null) return;
+            var healthBar = entity.GetHudComponent<HealthBar>();
+            if (healthBar == null)
+            {
+                healthBar = new HealthBar(entity, Settings);
+                entity.SetHudComponent(healthBar);
+            }
+            HpBarWork(healthBar);
+        }
+
+        private bool IsEntityRelevant(Entity entity)
+        {
+            if (entity == null || !entity.IsValid || entity.IsDead) return false;
+            if (entity.Type != EntityType.Monster && entity.Type != EntityType.Player) return false;
+            return true;
         }
 
         private bool SkipHealthBar(HealthBar healthBar)
         {
-            if (healthBar == null) return true;
-            if (healthBar.Settings == null) return true;
+            if (healthBar?.Settings == null) return true;
             if (!healthBar.Settings.Enable) return true;
             if (!healthBar.Entity.IsAlive) return true;
             if (healthBar.HpPercent < 0.001f) return true;
-            if (healthBar.Type == CreatureType.Minion && healthBar.HpPercent * 100 > Settings.ShowMinionOnlyBelowHp) return true;
-/*            if (healthBar.Entity.League == LeagueType.Legion && healthBar.Entity.IsHidden 
-                && healthBar.Entity.Rarity != MonsterRarity.Unique 
-                && healthBar.Entity.Rarity != MonsterRarity.Rare) return true;*/
+            if (healthBar.Distance > Settings.LimitDrawDistance) return true;
+            if (healthBar.Type == CreatureType.Minion
+                && healthBar.HpPercent * 100 > Settings.ShowMinionOnlyBelowHp) return true;
 
             return false;
         }
 
-        public void HpBarWork(HealthBar healthBar)
+        private void HpBarWork(HealthBar healthBar)
         {
             if (healthBar == null) return;
             healthBar.Skip = SkipHealthBar(healthBar);
             if (healthBar.Skip) return;
 
-            var healthBarDistance = healthBar.Distance;
-            if (healthBarDistance > Settings.LimitDrawDistance)
-            {
-                healthBar.Skip = true;
-                return;
-            }
-
             var worldCoords = healthBar.Entity.Pos;
             worldCoords.Z += Settings.GlobalZ;
-            var mobScreenCoords = camera.WorldToScreen(worldCoords);
+            var mobScreenCoords = Camera.WorldToScreen(worldCoords);
             if (mobScreenCoords == Vector2.Zero) return;
-            var scaledWidth = healthBar.Settings.Width * windowSize.Width;
-            var scaledHeight = healthBar.Settings.Height * windowSize.Height;
+            var scaledWidth = healthBar.Settings.Width * WindowSize.Width;
+            var scaledHeight = healthBar.Settings.Height * WindowSize.Height;
 
-            healthBar.BackGround = new RectangleF(mobScreenCoords.X - scaledWidth / 2f, mobScreenCoords.Y - scaledHeight / 2f, scaledWidth,
+            healthBar.BackGround = new RectangleF(
+                mobScreenCoords.X - scaledWidth / 2f,
+                mobScreenCoords.Y - scaledHeight / 2f + healthBar.Settings.BarOffsetY.Value,
+                scaledWidth,
                 scaledHeight);
 
-            if (healthBarDistance > 80 && !windowRectangle.Intersects(healthBar.BackGround))
+            if (healthBar.Distance > 80 && !WindowRectangle.Intersects(healthBar.BackGround))
             {
                 healthBar.Skip = true;
                 return;
-            }
-
-            foreach (var forSkipBar in ElementForSkip)
-            {
-                if (forSkipBar.IsVisibleLocal && forSkipBar.GetClientRectCache.Intersects(healthBar.BackGround))
-                {
-                    healthBar.Skip = true;
-                }
             }
 
             healthBar.HpWidth = healthBar.HpPercent * scaledWidth;
             healthBar.EsWidth = healthBar.Life.ESPercentage * scaledWidth;
         }
 
-        public override Job Tick()
+
+        private void DrawBar(HealthBar bar)
         {
-            if (Settings.MultiThreading && GameController.EntityListWrapper.ValidEntitiesByType[EntityType.Monster].Count >=
-                Settings.MultiThreadingCountEntities)
-            {
-                return new Job(nameof(HealthBars), TickLogic);
-
-                // return GameController.MultiThreadManager.AddJob(TickLogic, nameof(HealthBars));
-            }
-
-            TickLogic();
-            return null;
-        }
-
-        private void TickLogic()
-        {
-            CanTick = true;
-
-            if (ingameUICheckVisible.Value
-                || camera == null
-                || GameController.Area.CurrentArea.IsTown && !Settings.ShowInTown)
-            {
-                CanTick = false;
-                return;
-            }
-
-            var monster = GameController.EntityListWrapper.ValidEntitiesByType[EntityType.Monster];
-            foreach (var validEntity in monster)
-            {
-                var healthBar = validEntity.GetHudComponent<HealthBar>();
-                try
-                {
-                    HpBarWork(healthBar);
-                }
-                catch (Exception e)
-                {
-                    DebugWindow.LogError(e.Message);
-                }
-            }
-
-            foreach (var validEntity in GameController.EntityListWrapper.ValidEntitiesByType[EntityType.Player])
-            {
-                var healthBar = validEntity.GetHudComponent<HealthBar>();
-
-                if (healthBar != null)
-                    HpBarWork(healthBar);
-            }
-        }
-
-        public override void Render()
-        {
-            if (!CanTick) return;
-
-            foreach (var entity in GameController.EntityListWrapper.ValidEntitiesByType[EntityType.Monster])
-            {
-                var healthBar = entity.GetHudComponent<HealthBar>();
-                if (healthBar == null) continue;
-
-                if (healthBar.Skip)
-                {
-                    healthBar.Skip = false;
-                    continue;
-                }
-
-                DrawBar(healthBar);
-            }
-
-            foreach (var entity in GameController.EntityListWrapper.ValidEntitiesByType[EntityType.Player])
-            {
-                var healthBar = entity.GetHudComponent<HealthBar>();
-                if (healthBar == null) continue;
-
-                if (healthBar.Skip)
-                {
-                    healthBar.Skip = false;
-                    continue;
-                }
-
-                DrawBar(healthBar);
-            }
-
-            if (Settings.SelfHealthBarShow)
-            {
-                var worldCoords = PlayerBar.Entity.Pos;
-                worldCoords.Z += Settings.PlayerZ;
-                var result = camera.WorldToScreen(worldCoords);
-
-                if (Math.Abs(oldplayerCord.X - result.X) < 40 || Math.Abs(oldplayerCord.X - result.Y) < 40)
-                    result = oldplayerCord;
-                else
-                    oldplayerCord = result;
-
-                var scaledWidth = PlayerBar.Settings.Width * windowSize.Width;
-                var scaledHeight = PlayerBar.Settings.Height * windowSize.Height;
-
-                PlayerBar.BackGround = new RectangleF(result.X - scaledWidth / 2f, result.Y - scaledHeight / 2f, scaledWidth,
-                    scaledHeight);
-
-                PlayerBar.HpWidth = PlayerBar.HpPercent * scaledWidth;
-                PlayerBar.EsWidth = PlayerBar.Life.ESPercentage * scaledWidth;
-                DrawBar(PlayerBar);
-            }
-        }
-
-        public void DrawBar(HealthBar bar)
-        {
-            if (Settings.ImGuiRender)
-            {
-                Graphics.DrawBox(bar.BackGround, bar.Settings.BackGround);
-                Graphics.DrawBox(new RectangleF(bar.BackGround.X, bar.BackGround.Y, bar.HpWidth, bar.BackGround.Height), bar.Color);
-            }
-            else
-            {
-                Graphics.DrawImage("healthbar.png", bar.BackGround, bar.Settings.BackGround);
-
-                Graphics.DrawImage("healthbar.png", new RectangleF(bar.BackGround.X, bar.BackGround.Y, bar.HpWidth, bar.BackGround.Height),
-                    bar.Color);
-            }
-
+            if (bar == null) return;
+            Graphics.DrawBox(bar.BackGround, bar.Settings.BackGround);
+            Graphics.DrawBox(new RectangleF(bar.BackGround.X, bar.BackGround.Y, bar.HpWidth, bar.BackGround.Height), bar.Color);
             Graphics.DrawBox(new RectangleF(bar.BackGround.X, bar.BackGround.Y, bar.EsWidth, bar.BackGround.Height * 0.33f), Color.Aqua);
-            bar.BackGround.Inflate(1, 1);
             Graphics.DrawFrame(bar.BackGround, bar.Settings.Outline, 1);
 
             ShowPercents(bar);
@@ -273,11 +236,11 @@ namespace HealthBars
             string healthBarText = "";
             if (bar.Settings.ShowHealthText)
             {
-                healthBarText = $"{bar.Life.CurHP.ToString("N0")}/{bar.Life.MaxHP.ToString("N0")}";
+                healthBarText = $"{bar.Life.CurHP:N0}/{bar.Life.MaxHP:N0}";
             } 
             else if (bar.Settings.ShowEnergyShieldText)
             {
-                healthBarText = $"{bar.Life.CurES.ToString("N0")}/{bar.Life.MaxES.ToString("N0")}";
+                healthBarText = $"{bar.Life.CurES:N0}/{bar.Life.MaxES:N0}";
             }
 
             Graphics.DrawText(healthBarText,
@@ -308,17 +271,6 @@ namespace HealthBars
         private string FloatToPercentString (float number)
         {
             return $"{Math.Floor(number * 100).ToString(CultureInfo.InvariantCulture)}";
-        }
-
-        public override void EntityAdded(Entity Entity)
-        {
-            if (Entity.Type != EntityType.Monster && Entity.Type != EntityType.Player 
-                || Entity.Address == GameController.Player.Address 
-                || Entity.Type == EntityType.Daemon) return;
-
-            if (Entity.GetComponent<Life>() != null && !Entity.IsAlive) return;
-            if (IgnoredEntities.Any(x => Entity.Path.StartsWith(x))) return;
-            Entity.SetHudComponent(new HealthBar(Entity, Settings));
         }
     }
 }

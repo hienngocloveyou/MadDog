@@ -31,7 +31,7 @@ namespace HealthBars
         private readonly TimeCache<float> _distance;
         private bool _init;
         private int _lastHp;
-        public RectangleF BackGround;
+        public RectangleF BackGround { get; set; }
         public bool CanNotDie;
         public double DiedFrames = 0;
         private bool isHostile;

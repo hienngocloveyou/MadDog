@@ -93,6 +93,7 @@ namespace HealthBars
             BackGround = SharpDX.Color.Black;
             TextSize = new RangeNode<int>(10, 5, 25);
             FloatingCombatStackSize = new RangeNode<int>(1, 1, 10);
+            BarOffsetY = new RangeNode<int>(0, -200, 200);
         }
 
         public UnitSettings(uint color, uint outline, uint percentTextColor, bool showHealthText, int width, int height) : this(color, outline)
@@ -116,6 +117,7 @@ namespace HealthBars
         public ToggleNode ShowEnergyShieldPercents { get; set; }
         public ToggleNode ShowHealthText { get; set; }
         public ToggleNode ShowEnergyShieldText { get; set; }
+        public RangeNode<int> BarOffsetY { get; set; }
         public RangeNode<int> TextSize { get; set; }
         [Menu("Floating Combat Text")]
         public ToggleNode ShowFloatingCombatDamage { get; set; }
