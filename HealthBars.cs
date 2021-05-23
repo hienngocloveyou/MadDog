@@ -87,26 +87,7 @@ namespace HealthBars
         {
             if (!ShouldRun()) return;
 
-            // own player
-            if (Settings.SelfHealthBarShow != null && Settings.SelfHealthBarShow)
-            {
-                var playerBar = Player.GetHudComponent<HealthBar>();
-
-                // if this check is not done the player health bar is jiggling around
-                var location = playerBar.BackGround.Location;
-                if (Math.Abs(OldPlayerHealthbarPosition.X - location.X) < 50
-                    || Math.Abs(OldPlayerHealthbarPosition.Y - location.Y) < 50)
-                {
-                    playerBar.BackGround = new RectangleF(
-                        OldPlayerHealthbarPosition.X,
-                        OldPlayerHealthbarPosition.Y,
-                        playerBar.BackGround.Width,
-                        playerBar.BackGround.Height);
-                }
-                OldPlayerHealthbarPosition = playerBar.BackGround.Location;
-
-                DrawBar(playerBar);
-            }
+            RenderCurrentPlayerHealthbar();
 
             // other entities
             foreach (var idEntityPair in GameController.EntityListWrapper.EntityCache)
@@ -120,6 +101,29 @@ namespace HealthBars
 
                 DrawBar(healthBar);
             }
+        }
+
+        private void RenderCurrentPlayerHealthbar()
+        {
+            if (Settings.SelfHealthBarShow == null || !Settings.SelfHealthBarShow) return;
+
+            var playerBar = Player.GetHudComponent<HealthBar>();
+            if (playerBar == null) return;
+
+            // if this check is not done the player health bar is jiggling around
+            var location = playerBar.BackGround.Location;
+            if (Math.Abs(OldPlayerHealthbarPosition.X - location.X) < 25
+                || Math.Abs(OldPlayerHealthbarPosition.Y - location.Y) < 25)
+            {
+                playerBar.BackGround = new RectangleF(
+                    OldPlayerHealthbarPosition.X,
+                    OldPlayerHealthbarPosition.Y,
+                    playerBar.BackGround.Width,
+                    playerBar.BackGround.Height);
+            }
+            OldPlayerHealthbarPosition = playerBar.BackGround.Location;
+
+            DrawBar(playerBar);
         }
 
         private bool ShouldRun()
