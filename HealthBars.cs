@@ -15,20 +15,18 @@ namespace HealthBars
 {
     public class HealthBars : BaseSettingsPlugin<HealthBarsSettings>
     {
-        private string IgnoreFile => Path.Combine("config", "ignored_entities.txt");
+        private static string IgnoreFile => Path.Combine("config", "ignored_entities.txt");
         private List<string> IgnoredEntities { get; set; }
         private Camera Camera => GameController.Game.IngameState.Camera;
         private IngameUIElements IngameUi { get; set; }
         private CachedValue<bool> IngameUiCheckVisible { get; set; }
         private Vector2 OldPlayerHealthbarPosition { get; set; }
         private Entity Player { get; set; }
-        private HealthBar PlayerBar { get; set; }
         private RectangleF WindowRectangle { get; set; }
         private Size2F WindowSize { get; set; }
 
         public override void OnLoad()
         {
-            CanUseMultiThreading = true;
             Graphics.InitImage("healthbar.png");
         }
 
@@ -36,13 +34,10 @@ namespace HealthBars
         {
             Player = GameController.Player;
             IngameUi = GameController.IngameState.IngameUi;
-            PlayerBar = new HealthBar(Player, Settings);
 
             GameController.EntityListWrapper.PlayerUpdate += (sender, args) =>
             {
                 Player = GameController.Player;
-
-                PlayerBar = new HealthBar(Player, Settings);
             };
 
             IngameUiCheckVisible = new TimeCache<bool>(() =>
@@ -73,7 +68,7 @@ namespace HealthBars
             } 
             else
             {
-                LogError($"Ignored entities file does not exist. Path: {path}");
+                LogError($"HealthBars.ReadIgnoreFile -> Ignored entities file does not exist. Path: {path}");
             }
         }
 
@@ -129,7 +124,7 @@ namespace HealthBars
 
         private bool ShouldRun()
         {
-            if (IngameUiCheckVisible.Value) return false;
+            if (IngameUiCheckVisible.Value && Settings.HideOverUi?.Value == true) return false;
             if (Camera == null) return false;
             if (GameController.Area.CurrentArea.IsTown && !Settings.ShowInTown) return false;
 
@@ -183,6 +178,7 @@ namespace HealthBars
             if (healthBar.Distance > Settings.LimitDrawDistance) return true;
             if (healthBar.Type == CreatureType.Minion
                 && healthBar.HpPercent * 100 > Settings.ShowMinionOnlyBelowHp) return true;
+            if (IgnoredEntities.Any(ignoreString => ignoreString.StartsWith(healthBar.Entity.Metadata))) return true;
 
             return false;
         }
@@ -194,7 +190,6 @@ namespace HealthBars
             if (healthBar.Skip) return;
 
             var worldCoords = healthBar.Entity.Pos;
-            worldCoords.Z += Settings.GlobalZ;
             var mobScreenCoords = Camera.WorldToScreen(worldCoords);
             if (mobScreenCoords == Vector2.Zero) return;
             var scaledWidth = healthBar.Settings.Width * WindowSize.Width;
