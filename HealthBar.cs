@@ -19,6 +19,9 @@ namespace HealthBars
             Update(entity, settings);
         }
         public RectangleF BackGround { get; set; }
+        public RectangleF HpRectangle { get; private set; }
+        public RectangleF EsRectangle { get; private set; }
+        public Color Color { get; private set; }
         public bool Skip { get; set; }= false;
         public float HpPercent => Life?.HPPercentage ?? 100;
         private readonly TimeCache<float> _distance;
@@ -30,30 +33,26 @@ namespace HealthBars
         public float HpWidth { get; set; }
         public float EsWidth { get; set; }
 
-        public Color Color
+        public void CreateColor()
         {
-            get
-            {
-                if (IsHidden(Entity))
-                    return Color.LightGray;
-
-                if (HpPercent <= 0.1f)
-                    return Settings.Under10Percent;
-
-                return Settings.Color;
-            }
+            Color = ChooseColor();
         }
 
-        private bool IsHidden(Entity entity)
+        private Color ChooseColor()
         {
-            try
-            {
-                return entity.IsHidden;
-            }
-            catch
-            {
-                return false;
-            }
+            if (HpPercent <= 0.1f) return Settings.Under10Percent;
+            if (Entity.IsHidden) return Color.LightGray;
+            return Settings.Color;
+        }
+
+        public void CreateHpRectangle()
+        {
+            HpRectangle = new RectangleF(BackGround.X, BackGround.Y, HpWidth, BackGround.Height);
+        }
+
+        public void CreateEsRectangle(float esHeight = 0.33f)
+        {
+            EsRectangle = new RectangleF(BackGround.X, BackGround.Y, EsWidth, BackGround.Height * esHeight);
         }
 
         public void Update(Entity entity, HealthBarsSettings settings)

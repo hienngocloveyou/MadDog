@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -88,16 +89,13 @@ namespace HealthBars
             if (!ShouldRun()) return;
 
             RenderCurrentPlayerHealthbar();
-
             // other entities
-            foreach (var idEntityPair in GameController.EntityListWrapper.EntityCache)
+            foreach (var entity in GameController.EntityListWrapper.OnlyValidEntities)
             {
-                var entity = idEntityPair.Value;
-                if (!IsEntityRelevant(entity)) continue;
-                if (entity.Address == Player.Address) continue;
+                var healthBar = entity?.GetHudComponent<HealthBar>();
 
-                var healthBar = entity.GetHudComponent<HealthBar>();
                 if (healthBar?.Skip != false) continue;
+                if (entity?.Address == Player.Address) continue;
 
                 DrawBar(healthBar);
             }
@@ -110,21 +108,9 @@ namespace HealthBars
             var playerBar = Player.GetHudComponent<HealthBar>();
             if (playerBar == null) return;
 
-            // if this check is not done the player health bar is jiggling around
-            var location = playerBar.BackGround.Location;
-            if (Math.Abs(OldPlayerHealthbarPosition.X - location.X) < 25
-                || Math.Abs(OldPlayerHealthbarPosition.Y - location.Y) < 25)
-            {
-                playerBar.BackGround = new RectangleF(
-                    OldPlayerHealthbarPosition.X,
-                    OldPlayerHealthbarPosition.Y,
-                    playerBar.BackGround.Width,
-                    playerBar.BackGround.Height);
-            }
-            OldPlayerHealthbarPosition = playerBar.BackGround.Location;
-
             DrawBar(playerBar);
         }
+
 
         private bool ShouldRun()
         {
@@ -139,6 +125,7 @@ namespace HealthBars
         {
             try
             {
+                AddHealthBarComponent(Player, true);
                 foreach (var idEntityPair in GameController.EntityListWrapper.EntityCache)
                 {
                     var entity = idEntityPair.Value;
@@ -146,7 +133,6 @@ namespace HealthBars
 
                     AddHealthBarComponent(entity);
                 }
-                AddHealthBarComponent(Player);
             }
             catch (Exception e)
             {
@@ -154,7 +140,7 @@ namespace HealthBars
             }
         }
 
-        private void AddHealthBarComponent(Entity entity)
+        private void AddHealthBarComponent(Entity entity, bool isOwnPlayerBar = false)
         {
             if (entity == null) return;
             var healthBar = entity.GetHudComponent<HealthBar>();
@@ -163,8 +149,38 @@ namespace HealthBars
                 healthBar = new HealthBar(entity, Settings);
                 entity.SetHudComponent(healthBar);
             }
+
+            if (isOwnPlayerBar) 
+            {
+                PlayerHpBarWork(healthBar);
+                return;
+            }
             HpBarWork(healthBar);
         }
+
+        //private void AdjustPlayerHealthbar(HealthBar playerBar)
+        //{
+        //    if (playerBar == null) return;
+
+        //    var offsetX = CalculateXOffsetFromOpenPanel(GameController.Game.IngameState.IngameUi.OpenLeftPanel)
+        //        - CalculateXOffsetFromOpenPanel(GameController.Game.IngameState.IngameUi.OpenRightPanel);
+
+        //    // if this check is not done the player health bar is jiggling around
+        //    var location = playerBar.BackGround.Location;
+        //    if (Math.Abs(OldPlayerHealthbarPosition.X - location.X) < 25
+        //        || Math.Abs(OldPlayerHealthbarPosition.Y - location.Y) < 25)
+        //    {
+        //        playerBar.BackGround = new RectangleF(
+        //            OldPlayerHealthbarPosition.X + offsetX,
+        //            OldPlayerHealthbarPosition.Y,
+        //            playerBar.BackGround.Width,
+        //            playerBar.BackGround.Height);
+        //    }
+        //    OldPlayerHealthbarPosition = playerBar.BackGround.Location;
+
+        //    playerBar.CreateHpRectangle();
+        //    playerBar.CreateEsRectangle();
+        //}
 
         private bool IsEntityRelevant(Entity entity)
         {
@@ -213,15 +229,49 @@ namespace HealthBars
 
             healthBar.HpWidth = healthBar.HpPercent * scaledWidth;
             healthBar.EsWidth = healthBar.Life.ESPercentage * scaledWidth;
+
+            healthBar.CreateHpRectangle();
+            healthBar.CreateEsRectangle();
+            healthBar.CreateColor();
         }
 
+        private void PlayerHpBarWork(HealthBar healthBar)
+        {
+            if (healthBar == null) return;
+
+            var scaledWidth = healthBar.Settings.Width * WindowSize.Width;
+            var scaledHeight = healthBar.Settings.Height * WindowSize.Height;
+
+            var offsetX = CalculateXOffsetFromOpenPanel(GameController.Game.IngameState.IngameUi.OpenLeftPanel)
+                - CalculateXOffsetFromOpenPanel(GameController.Game.IngameState.IngameUi.OpenRightPanel);
+
+            healthBar.BackGround = new RectangleF(
+                WindowRectangle.X + WindowRectangle.Width / 2 - scaledWidth / 2 + offsetX,
+                WindowRectangle.Y + WindowRectangle.Height / 2 - scaledHeight / 2 + healthBar.Settings.BarOffsetY.Value,
+                scaledWidth,
+                scaledHeight
+            );
+
+            healthBar.HpWidth = healthBar.HpPercent * scaledWidth;
+            healthBar.EsWidth = healthBar.Life.ESPercentage * scaledWidth;
+
+            healthBar.CreateHpRectangle();
+            healthBar.CreateEsRectangle();
+            healthBar.CreateColor();
+        }
+
+        private float CalculateXOffsetFromOpenPanel(Element panel)
+        {
+            if (!panel.IsVisible) return 0;
+            return panel.GetClientRectCache.Width / 2;
+        }
 
         private void DrawBar(HealthBar bar)
         {
             if (bar == null) return;
             Graphics.DrawBox(bar.BackGround, bar.Settings.BackGround);
-            Graphics.DrawBox(new RectangleF(bar.BackGround.X, bar.BackGround.Y, bar.HpWidth, bar.BackGround.Height), bar.Color);
-            Graphics.DrawBox(new RectangleF(bar.BackGround.X, bar.BackGround.Y, bar.EsWidth, bar.BackGround.Height * 0.33f), Color.Aqua);
+            Graphics.DrawBox(bar.HpRectangle, bar.Color);
+            Graphics.DrawBox(bar.EsRectangle, Color.Aqua);
             Graphics.DrawFrame(bar.BackGround, bar.Settings.Outline, 1);
 
             ShowPercents(bar);
