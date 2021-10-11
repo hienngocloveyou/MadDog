@@ -31,6 +31,7 @@ namespace MadDog
             
         }
 
+        [Menu("Enable")]
         public ToggleNode Enable { get; set; }
         public RangeNode<float> Height { get; set; }
         
