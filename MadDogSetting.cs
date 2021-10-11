@@ -7,6 +7,7 @@ namespace MadDog
 
     public class MadDogSetting : ISettings
     {
+        [Menu("Enable")]
         public ToggleNode Enable { get; set; }
 
         public MadDogSetting() //test
