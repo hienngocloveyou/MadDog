@@ -22,9 +22,10 @@ namespace MadDog
 
     public class UnitSettings : ISettings
     {
+
         public UnitSettings(uint color, uint outline)
         {
-            
+            Enable = new ToggleNode(true);
             Height = new RangeNode<float>(10, 10, 100);
             
         }
