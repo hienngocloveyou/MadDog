@@ -30,6 +30,8 @@ namespace MadDog
             //camera = new Camera(Player, Settings);
 
             //ReadIgnoreFile();
+            base.Initialise();
+            Name = "Testing";
 
             return true;
         }
