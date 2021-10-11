@@ -64,11 +64,10 @@ namespace MadDog
         public override void Render()
         {
             
-            if (Settings.Enable == true)
-            {
-                Settings.Cameras.Height.Value = 15;
-            }
             
+
+            Settings.Cameras.Height.Value = 15;
+
         }
 
         
