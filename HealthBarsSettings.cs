@@ -6,7 +6,7 @@ namespace HealthBars
 {
     public class HealthBarsSettings : ISettings
     {
-        public HealthBarsSettings()
+        public HealthBarsSettings() //test
         {
             Enable = new ToggleNode(true);
             ShowInTown = new ToggleNode(false);
