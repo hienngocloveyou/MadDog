@@ -69,11 +69,16 @@ namespace MadDog
             {
                 Settings.Cameras.Height.Max = 200;
             }
+            else
+            {
+                Settings.Cameras.Height.Max = 100;
+            }
             
             
 
         }
 
-        
+
+
     }
 }
