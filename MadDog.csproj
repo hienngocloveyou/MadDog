@@ -74,7 +74,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Camera.cs" />
     <Compile Include="DebuffPanel.cs" />
     <Compile Include="HealthBar.cs" />
     <Compile Include="MadDog.cs" />

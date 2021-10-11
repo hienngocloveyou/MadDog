@@ -15,8 +15,7 @@ namespace MadDog
 {
     public class MadDog : BaseSettingsPlugin<MadDogSetting>
     {
-        private Entity Player;
-        private Camera camera;
+  
 
         public override void OnLoad()
         {
@@ -53,9 +52,9 @@ namespace MadDog
 
         public override Job Tick()
         {
-            
 
-            
+            Settings.Cameras.Height.Value = 15;
+
             return null;
         }
 
