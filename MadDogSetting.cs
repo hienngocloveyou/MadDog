@@ -23,7 +23,7 @@ namespace MadDog
 
     public class UnitSettings : ISettings
     {
-
+        
         public UnitSettings(uint color, uint outline)
         {
             Enable = new ToggleNode(true);
@@ -31,7 +31,7 @@ namespace MadDog
             
         }
 
-        [Menu("Enable")]
+        //[Menu("Enable")]
         public ToggleNode Enable { get; set; }
         public RangeNode<float> Height { get; set; }
         
