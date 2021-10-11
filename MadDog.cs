@@ -31,6 +31,7 @@ namespace MadDog
             //ReadIgnoreFile();
             base.Initialise();
             Name = "Testing";
+            Settings.Cameras.Height.Value = 15;
 
             return true;
         }
@@ -53,7 +54,7 @@ namespace MadDog
         public override Job Tick()
         {
 
-            Settings.Cameras.Height.Value = 15;
+           
 
             return null;
         }
@@ -64,8 +65,8 @@ namespace MadDog
         {
             
             
-
-            Settings.Cameras.Height.Value = 15;
+            
+            
 
         }
 
