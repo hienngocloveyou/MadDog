@@ -63,15 +63,17 @@ namespace MadDog
 
         public override void Render()
         {
+            /*
             if (Settings.Enable == true)
             {
                 Settings.Cameras.Enable = new ExileCore.Shared.Nodes.ToggleNode(true);
-                return;
+                //return;
             }
             else
             {
                 Settings.Cameras.Enable = new ExileCore.Shared.Nodes.ToggleNode(false);
             }
+            */
         }
 
         
