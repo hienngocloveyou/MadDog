@@ -21,6 +21,7 @@ namespace MadDog
         {
             CanUseMultiThreading = true;
             //Graphics.InitImage("healthbar.png");
+            
         }
 
         public override bool Initialise()
@@ -64,7 +65,10 @@ namespace MadDog
         public override void Render()
         {
             
-            
+            if(Settings.Cameras.Height == 15)
+            {
+                Settings.Cameras.Height.Max = 200;
+            }
             
             
 
