@@ -26,17 +26,12 @@ namespace MadDog
         {
             
             Height = new RangeNode<float>(10, 10, 100);
-            Color = color;
-            Outline = outline;
-            BackGround = SharpDX.Color.Black;
-
+            
         }
 
         public ToggleNode Enable { get; set; }
         public RangeNode<float> Height { get; set; }
-        public ColorNode Color { get; set; }
-        public ColorNode Outline { get; set; }
-        public ColorNode BackGround { get; set; }
+        
 
 
 

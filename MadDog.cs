@@ -15,7 +15,8 @@ namespace MadDog
 {
     public class MadDog : BaseSettingsPlugin<MadDogSetting>
     {
-       
+        private Entity Player;
+        private Camera camera;
 
         public override void OnLoad()
         {
@@ -25,8 +26,10 @@ namespace MadDog
 
         public override bool Initialise()
         {
-            
-            ReadIgnoreFile();
+            //Player = GameController.Player;
+            //camera = new Camera(Player, Settings);
+
+            //ReadIgnoreFile();
 
             return true;
         }
@@ -58,7 +61,7 @@ namespace MadDog
 
         public override void Render()
         {
-            
+            if(!Settings.Enable) return;
         }
 
         
