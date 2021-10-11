@@ -7,10 +7,11 @@ using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using SharpDX;
 
-namespace HealthBars
+namespace MadDog
 {
     public class HealthBar
     {
+        /*
         public HealthBar(Entity entity, HealthBarsSettings settings)
         {
             Entity = entity;
@@ -103,5 +104,7 @@ namespace HealthBars
                 }
             }
         }
+        */
     }
+
 }

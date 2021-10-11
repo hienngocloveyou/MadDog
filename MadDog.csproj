@@ -7,8 +7,8 @@
     <ProjectGuid>{4DEE86D7-5666-4B10-93C2-0CCEEF3799E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HealthBars</RootNamespace>
-    <AssemblyName>HealthBars</AssemblyName>
+    <RootNamespace>MadDog</RootNamespace>
+    <AssemblyName>MadDog</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\PoeHelper\Plugins\Compiled\HealthBars\</OutputPath>
+    <OutputPath>..\..\..\PoeHelper\Plugins\Compiled\MadDog\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -76,8 +76,9 @@
   <ItemGroup>
     <Compile Include="DebuffPanel.cs" />
     <Compile Include="HealthBar.cs" />
-    <Compile Include="HealthBars.cs" />
+    <Compile Include="MadDog.cs" />
     <Compile Include="HealthBarsSettings.cs" />
+    <Compile Include="MadDogSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

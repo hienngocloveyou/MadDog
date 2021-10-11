@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthBars", "HealthBars.csproj", "{4DEE86D7-5666-4B10-93C2-0CCEEF3799E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadDog", "MadDog.csproj", "{4DEE86D7-5666-4B10-93C2-0CCEEF3799E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
