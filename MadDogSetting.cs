@@ -11,7 +11,7 @@ namespace MadDog
 
         public MadDogSetting() //test
         {
-            Enable = new ToggleNode(true);
+            Enable = new ToggleNode(false);
             Cameras = new UnitSettings(0x008000ff, 0);
 
         }
