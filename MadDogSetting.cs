@@ -13,7 +13,7 @@ namespace MadDog
 
         public MadDogSetting() //test
         {
-            Enable = new ToggleNode(false);
+            Enable = new ToggleNode(true);
             Distance = new UnitSettings(0x008000ff, 0);
 
         }
