@@ -18,6 +18,7 @@ namespace MadDog
     {
 
         private CameraOffsets camera;
+        private Camera camera1;
         public override void OnLoad()
         {
             CanUseMultiThreading = true;
@@ -64,7 +65,7 @@ namespace MadDog
         public override void Render()
         {
 
-            if (!Settings.Enable) return;
+            //if (!Settings.Enable) return;
             updateCamera();
 
         }
@@ -72,6 +73,7 @@ namespace MadDog
         private void updateCamera()
         {
             camera.ZFar = Settings.Cameras.Height;
+            camera1.HalfHeight = Settings.Cameras.Height;
         }
 
 
