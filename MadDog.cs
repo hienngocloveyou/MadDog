@@ -70,6 +70,7 @@ namespace MadDog
 
         }
 
+        /*
         private Vector3 GetLocalPlayerPos()
         {
             Vector3 pos = GameController.Game.IngameState.Data.LocalPlayer.GetComponent<Render>().Pos;
@@ -105,7 +106,7 @@ namespace MadDog
                 Graphics.DrawLine(point1, point2, lineWidth, color);
             }
         }
-
+        */
 
 
     }
