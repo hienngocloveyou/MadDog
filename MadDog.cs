@@ -17,8 +17,8 @@ namespace MadDog
     public class MadDog : BaseSettingsPlugin<MadDogSetting>
     {
 
-        private CameraOffsets camera;
-        private Camera camera1;
+        
+        private Camera camera;
         public override void OnLoad()
         {
             CanUseMultiThreading = true;
@@ -72,8 +72,8 @@ namespace MadDog
 
         private void updateCamera()
         {
-            camera.ZFar = Settings.Cameras.Height;
-            camera1.HalfHeight = Settings.Cameras.Height;
+
+            Settings.Cameras.Height.Value = camera.ZFar;
         }
 
 
