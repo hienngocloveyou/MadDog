@@ -18,8 +18,7 @@ namespace MadDog
     {
 
         
-        private Camera camera;
-        private CameraOffsets cameraOffsets;
+       
         public override void OnLoad()
         {
             CanUseMultiThreading = true;
@@ -34,8 +33,7 @@ namespace MadDog
 
             //ReadIgnoreFile();
 
-            camera = GameController.Game.IngameState.Camera;
-            cameraOffsets = GameController.Game.IngameState.Camera.CameraOffsets;
+            
             return true;
         }
 
@@ -67,18 +65,11 @@ namespace MadDog
         public override void Render()
         {
 
-            //if (!Settings.Enable) return;
-            updateCamera();
+            
 
         }
 
-        private void updateCamera()
-        {
-
-            Settings.Cameras.Height.Value = camera.CameraOffsets.ZFar;
-            //camera.HalfHeight = Settings.Cameras.Height.Value;
-            //cameraOffsets.ZFar = Settings.Cameras.Height.Value;
-        }
+        
 
 
 

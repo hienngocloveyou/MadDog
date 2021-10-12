@@ -1,6 +1,7 @@
 ﻿using ExileCore.Shared.Attributes;
 using ExileCore.Shared.Interfaces;
 using ExileCore.Shared.Nodes;
+using System.Windows.Forms;
 
 namespace MadDog
 {
@@ -13,12 +14,13 @@ namespace MadDog
         public MadDogSetting() //test
         {
             Enable = new ToggleNode(false);
-            Cameras = new UnitSettings(0x008000ff, 0);
+            Distance = new UnitSettings(0x008000ff, 0);
 
         }
 
-        [Menu("Cameras", 1)]
-        public UnitSettings Cameras { get; set; }
+        public HotkeyNode ContagionKey { get; set; } = Keys.Q;
+        [Menu("Distance", 1)]
+        public UnitSettings Distance { get; set; }
     }
 
     public class UnitSettings : ISettings
@@ -27,13 +29,13 @@ namespace MadDog
         public UnitSettings(uint color, uint outline)
         {
             Enable = new ToggleNode(true);
-            Height = new RangeNode<float>(10, 10, 100);
+            distance = new RangeNode<float>(10, 10, 100);
             
         }
 
         //[Menu("Enable")]
         public ToggleNode Enable { get; set; }
-        public RangeNode<float> Height { get; set; }
+        public RangeNode<float> distance { get; set; }
         
 
 
