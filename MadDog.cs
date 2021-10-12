@@ -32,8 +32,8 @@ namespace MadDog
             //camera = new Camera(Player, Settings);
 
             //ReadIgnoreFile();
-            
 
+            camera = new Camera();
             return true;
         }
 
@@ -73,7 +73,7 @@ namespace MadDog
         private void updateCamera()
         {
 
-            Settings.Cameras.Height.Value = 50;
+            Settings.Cameras.Height.Value = camera.ZFar;
         }
 
 
