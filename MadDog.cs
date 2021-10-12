@@ -66,7 +66,7 @@ namespace MadDog
         {
 
             DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Distance.distance.Value, 25, 2, Color.LawnGreen);
-            Settings.Distance.distance.Value = (int)GetLocalPlayerPos().X;
+            //Settings.Distance.distance.Value = (int)GetLocalPlayerPos().X;
 
         }
 
