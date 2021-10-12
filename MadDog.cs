@@ -65,7 +65,7 @@ namespace MadDog
         public override void Render()
         {
 
-            //DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Distance.distance.Value, 25, 2, Color.LawnGreen);
+            DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Distance.distance.Value, 25, 2, Color.LawnGreen);
             Settings.Distance.distance.Value = (int)GetLocalPlayerPos().X;
 
         }
@@ -78,7 +78,7 @@ namespace MadDog
             return pos;
         }
 
-        /*
+        
         private void DrawEllipseToWorld(Vector3 vector3Pos, int radius, int points, int lineWidth, Color color)
         {
             var camera = GameController.Game.IngameState.Camera;
@@ -107,7 +107,7 @@ namespace MadDog
                 Graphics.DrawLine(point1, point2, lineWidth, color);
             }
         }
-        */
+        
 
 
     }
