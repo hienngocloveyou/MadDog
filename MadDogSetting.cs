@@ -29,13 +29,13 @@ namespace MadDog
         public UnitSettings(uint color, uint outline)
         {
             Enable = new ToggleNode(true);
-            distance = new RangeNode<float>(10, 10, 100);
+            distance = new RangeNode<int>(10, 10, 100);
             
         }
 
         //[Menu("Enable")]
         public ToggleNode Enable { get; set; }
-        public RangeNode<float> distance { get; set; }
+        public RangeNode<int> distance { get; set; }
         
 
 
