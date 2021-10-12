@@ -73,7 +73,8 @@ namespace MadDog
         private void updateCamera()
         {
 
-            Settings.Cameras.Height.Value = camera.CameraOffsets.ZFar;
+            //Settings.Cameras.Height.Value = camera.CameraOffsets.ZFar;
+            camera.HalfHeight = Settings.Cameras.Height.Value;
         }
 
 
