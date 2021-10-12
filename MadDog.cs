@@ -10,13 +10,14 @@ using ExileCore.PoEMemory.MemoryObjects;
 using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using SharpDX;
+using GameOffsets;
 
 namespace MadDog
 {
     public class MadDog : BaseSettingsPlugin<MadDogSetting>
     {
-  
 
+        private CameraOffsets camera;
         public override void OnLoad()
         {
             CanUseMultiThreading = true;
@@ -30,9 +31,7 @@ namespace MadDog
             //camera = new Camera(Player, Settings);
 
             //ReadIgnoreFile();
-            base.Initialise();
-            Name = "Testing";
-            Settings.Cameras.Height.Value = 15;
+            
 
             return true;
         }
@@ -64,18 +63,15 @@ namespace MadDog
 
         public override void Render()
         {
-            
-            if(Settings.Cameras.Height == 15)
-            {
-                Settings.Cameras.Height.Max = 200;
-            }
-            else
-            {
-                Settings.Cameras.Height.Max = 100;
-            }
-            
-            
 
+            if (!Settings.Enable) return;
+            updateCamera();
+
+        }
+
+        private void updateCamera()
+        {
+            camera.ZFar = Settings.Cameras.Height;
         }
 
 
