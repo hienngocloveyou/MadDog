@@ -33,7 +33,7 @@ namespace MadDog
 
             //ReadIgnoreFile();
 
-            camera = new Camera();
+            camera = GameController.Game.IngameState.Camera;
             return true;
         }
 
