@@ -35,7 +35,7 @@ namespace MadDog
         public override bool Initialise()
         {
             Input.RegisterKey(Keys.LButton);
-            Input.RegisterKey(Settings.EnableAim.Value);
+            //Input.RegisterKey(Settings.EnableAim.Value);
 
             //ReadIgnoreFile();
 
@@ -207,10 +207,10 @@ namespace MadDog
 
         private void enableAim()
         {
-            if (Input.IsKeyDown(Settings.EnableAim.Value))
-            {
-                Settings.Aimbot.Enable.Value = !Settings.Aimbot.Enable.Value;
-            }
+            //if (Input.IsKeyDown(Settings.EnableAim.Value))
+            //{
+                //Settings.Aimbot.Enable.Value = !Settings.Aimbot.Enable.Value;
+            //}
         }
         private void Aimbot()
         { 
