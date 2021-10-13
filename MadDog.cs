@@ -79,9 +79,9 @@ namespace MadDog
 
                 //Aimbot();
 
-                Input.SetCursorPos(Input.MousePosition);
+                //Input.SetCursorPos(Input.MousePosition);
 
-                Input.KeyPress(Settings.Activeskill.Value);
+                Input.KeyDown(Settings.Activeskill.Value);
             }
             
             //Settings.Distance.distance.Value = (int)GetLocalPlayerPos().X;
