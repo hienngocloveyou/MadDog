@@ -74,7 +74,7 @@ namespace MadDog
                         yield return Attack();
                     }
 
-                    if (Input.IsKeyDown(Keys.LButton) && _aiming == true)
+                    if (Input.IsKeyDown(Keys.LButton) && (_aiming == true || _aiming == false))
                     {
                         Input.SetCursorPos(camera.WorldToScreen(player.Pos + new Vector3(50,50,50)));
                         _aiming = false;
