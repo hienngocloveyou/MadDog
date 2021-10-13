@@ -18,7 +18,7 @@ namespace MadDog
 
         }
 
-        public HotkeyNode ContagionKey { get; set; } = Keys.Q;
+        public HotkeyNode Activeskill { get; set; } = Keys.Q;
         [Menu("Distance", 1)]
         public UnitSettings Distance { get; set; }
     }

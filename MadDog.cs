@@ -64,8 +64,11 @@ namespace MadDog
 
         public override void Render()
         {
-
-            DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Distance.distance.Value, 25, 2, Color.LawnGreen);
+            if(!Settings.Distance.Enable)
+            {
+                DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Distance.distance.Value, 25, 2, Color.LawnGreen);
+            }
+            
             //Settings.Distance.distance.Value = (int)GetLocalPlayerPos().X;
 
         }
