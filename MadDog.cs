@@ -76,9 +76,13 @@ namespace MadDog
 
                     if (Input.IsKeyDown(Keys.LButton) && _aiming == true)
                     {
-                        Input.SetCursorPos(camera.WorldToScreen(player.Pos));
+                        Input.SetCursorPos(camera.WorldToScreen(player.Pos) + new Vector2(1,1));
                         _aiming = false;
 
+                    }
+                    if(GameController.Game.IngameState.IngameUi.InventoryPanel.IsVisible || GameController.Game.IngameState.IngameUi.InventoryPanel.IsVisible)
+                    {
+                        _aiming = false;
                     }
 
                     yield return new WaitTime(10);
