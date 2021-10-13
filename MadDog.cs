@@ -221,7 +221,7 @@ namespace MadDog
                     }
                     
 
-                    MonsterAim(_entities[0]);
+                    
                 }
             }
             
