@@ -1,16 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using ExileCore;
-using ExileCore.PoEMemory;
 using ExileCore.PoEMemory.Components;
 using ExileCore.PoEMemory.MemoryObjects;
-using ExileCore.Shared.Cache;
+using ExileCore.Shared;
 using ExileCore.Shared.Enums;
+using ExileCore.Shared.Helpers;
 using SharpDX;
-using GameOffsets;
 using System.Diagnostics;
 
 namespace MadDog
@@ -79,7 +79,7 @@ namespace MadDog
 
                 Aimbot();
 
-                Input.KeyPress(Settings.Activeskill.Value);
+                Input.SetCursorPos(Input.MousePosition + new Vector2(10,10));
 
             }
             
