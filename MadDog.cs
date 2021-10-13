@@ -16,8 +16,8 @@ namespace MadDog
 {
     public class MadDog : BaseSettingsPlugin<MadDogSetting>
     {
-        
 
+        private readonly List<Entity> _entities = new List<Entity>();
 
         public override void OnLoad()
         {
@@ -64,7 +64,7 @@ namespace MadDog
 
         public override void Render()
         {
-            if(!Settings.Distance.Enable)
+            if(Settings.Distance.Enable)
             {
                 DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Distance.distance.Value, 25, 2, Color.LawnGreen);
             }
@@ -76,8 +76,8 @@ namespace MadDog
         
         private Vector3 GetLocalPlayerPos()
         {
-            Vector3 pos = GameController.Game.IngameState.Data.LocalPlayer.GetComponent<Render>().Pos;
-
+            //Vector3 pos = GameController.Game.IngameState.Data.LocalPlayer.GetComponent<Render>().Pos;
+            Vector3 pos = GameController.Player.Pos;
             return pos;
         }
 
@@ -110,8 +110,29 @@ namespace MadDog
                 Graphics.DrawLine(point1, point2, lineWidth, color);
             }
         }
-        
 
+        public override void EntityAdded(Entity entityWrapper) { _entities.Add(entityWrapper); }
+
+        public override void EntityRemoved(Entity entityWrapper) { _entities.Remove(entityWrapper); }
+
+        private void FindMonsters()
+        {
+            foreach (Entity entity in GameController.Entities)
+            {
+                if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.HasComponent<Monster>() && entity.IsAlive)
+                {
+                    EntityAdded(entity);
+                }
+            }
+        }
+
+        private int GetDistanceFromPlayer(Entity entity)
+        {
+            var p = entity.Pos;
+            var player = GameController.Player;
+            var distance = Math.Sqrt(Math.Pow(player.Pos.X - p.X, 2) + Math.Pow(player.Pos.Y - p.Y, 2));
+            return (int)distance;
+        }
 
     }
 }
