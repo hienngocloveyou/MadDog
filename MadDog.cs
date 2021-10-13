@@ -206,7 +206,7 @@ namespace MadDog
 
         private void enableAim()
         {
-            if (Input.IsKeyDown(Settings.EnableAim.Value))
+            if (Input.IsKeyDown(Settings.EnableAim))
             {
                 Settings.Aimbot.Enable.Value = !Settings.Aimbot.Enable.Value;
             }
