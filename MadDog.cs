@@ -124,7 +124,9 @@ namespace MadDog
 
         private void FindMonsters()
         {
-            foreach (Entity entity in GameController.Entities)
+            var monster = GameController.EntityListWrapper.ValidEntitiesByType[EntityType.Monster];
+            foreach (Entity entity in monster)
+            //foreach (Entity entity in GameController.Entities)
             {
                 if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.HasComponent<Monster>() && entity.IsAlive)
                 {
