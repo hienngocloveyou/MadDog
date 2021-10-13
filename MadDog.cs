@@ -64,7 +64,7 @@ namespace MadDog
 
         public override void Render()
         {
-            if(Settings.Distance.Enable)
+            if(Settings.Enable && Settings.Distance.Enable)
             {
                 DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Distance.distance.Value, 25, 2, Color.LawnGreen);
             }
@@ -126,6 +126,17 @@ namespace MadDog
             }
         }
 
+        private void RemoveMonsters()
+        {
+            foreach (var entity in _entities)
+            {
+                if (GetDistanceFromPlayer(entity) > Settings.Distance.distance.Value)
+                {
+                    EntityRemoved(entity);
+                }
+            }
+        }
+
         private int GetDistanceFromPlayer(Entity entity)
         {
             var p = entity.Pos;
@@ -133,6 +144,8 @@ namespace MadDog
             var distance = Math.Sqrt(Math.Pow(player.Pos.X - p.X, 2) + Math.Pow(player.Pos.Y - p.Y, 2));
             return (int)distance;
         }
+
+       
 
     }
 }
