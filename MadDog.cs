@@ -72,7 +72,7 @@ namespace MadDog
                 }
                 
                 FindMonsters();
-                RemoveMonsters();
+                //RemoveMonsters();
                 DrawLineToMonster();
 
             }
@@ -125,12 +125,13 @@ namespace MadDog
 
         private void FindMonsters()
         {
-            var monster = GameController.EntityListWrapper.ValidEntitiesByType[EntityType.Monster];
-            foreach (Entity entity in monster)
-            //foreach (Entity entity in GameController.Entities)
+            _entities.Clear();
+            //var monster = GameController.EntityListWrapper.ValidEntitiesByType[EntityType.Monster];
+            //foreach (Entity entity in monster)
+            foreach (Entity entity in GameController.Entities)
             {
-                if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.IsAlive)
-                //if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.HasComponent<Monster>() && entity.IsAlive)
+                //if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.IsAlive)
+                if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.HasComponent<Monster>() && entity.IsAlive)
                 {
                     EntityAdded(entity);
                 }
