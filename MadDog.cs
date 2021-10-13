@@ -214,7 +214,7 @@ namespace MadDog
                     {
                         //Input.KeyPressRelease(Settings.Activeskill.Value);
                         //MonsterAim(_entities[0]);
-                        return;
+                        //return;
                     }
                     else
                     {
@@ -234,7 +234,7 @@ namespace MadDog
         {
             var monster_point = camera.WorldToScreen(monster.Pos);
             Input.SetCursorPos(monster_point);
-            Input.KeyDown(Settings.Activeskill.Value);
+            Input.KeyPressRelease(Settings.Activeskill.Value);
         }
 
 
