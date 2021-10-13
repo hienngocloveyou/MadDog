@@ -64,9 +64,16 @@ namespace MadDog
 
         public override void Render()
         {
-            if(Settings.Enable && Settings.Distance.Enable)
+            if(Settings.Enable)
             {
-                DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Distance.distance.Value, 25, 2, Color.LawnGreen);
+                if (Settings.Distance.Enable)
+                {
+                    DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Distance.distance.Value, 25, 2, Color.LawnGreen);
+                }
+                
+                FindMonsters();
+                RemoveMonsters();
+                DrawLineToMonster();
             }
             
             //Settings.Distance.distance.Value = (int)GetLocalPlayerPos().X;
@@ -145,7 +152,20 @@ namespace MadDog
             return (int)distance;
         }
 
-       
+        private void DrawLineToMonster()
+        {
+            var player = GameController.Player;
+            var camera = GameController.Game.IngameState.Camera;
+
+            Vector2 point1 = camera.WorldToScreen(player.Pos);
+
+            Vector2 point2;
+            foreach (var entity in _entities)
+            {
+                point2 = camera.WorldToScreen(entity.Pos);               
+                Graphics.DrawLine(point1, point2, 2, Color.LawnGreen);
+            }
+        }
 
     }
 }
