@@ -18,7 +18,6 @@ namespace MadDog
     public class MadDog : BaseSettingsPlugin<MadDogSetting>
     {
         private bool _aiming = false;
-        private Vector2 _oldMousePos;
         private Vector2 monster_point;
         private Coroutine _mainCoroutine;
         private readonly List<Entity> _entities = new List<Entity>();
@@ -64,12 +63,10 @@ namespace MadDog
                     // ignored
                 }
 
-                if (!Input.IsKeyDown(Keys.Q))
-                    _oldMousePos = Input.MousePosition;
 
                 if (Settings.Aimbot.Enable && player.IsAlive)
                 {
-                    if (Input.IsKeyDown(Keys.Q)
+                    if (Input.IsKeyDown(Keys.LButton)
                    && !GameController.Game.IngameState.IngameUi.InventoryPanel.IsVisible
                    && !GameController.Game.IngameState.IngameUi.OpenLeftPanel.IsVisible)
                     {
@@ -77,9 +74,9 @@ namespace MadDog
                         yield return Attack();
                     }
 
-                    if (!Input.IsKeyDown(Keys.Q) && _aiming == true)
+                    if (!Input.IsKeyDown(Keys.LButton) && _aiming == true)
                     {
-                        Input.SetCursorPos(_oldMousePos);
+                        Input.SetCursorPos(camera.WorldToScreen(player.Pos));
                         _aiming = false;
 
                     }
