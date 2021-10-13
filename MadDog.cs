@@ -11,13 +11,15 @@ using ExileCore.Shared.Cache;
 using ExileCore.Shared.Enums;
 using SharpDX;
 using GameOffsets;
+using System.Diagnostics;
 
 namespace MadDog
 {
     public class MadDog : BaseSettingsPlugin<MadDogSetting>
     {
-
+        private bool _aiming;
         private readonly List<Entity> _entities = new List<Entity>();
+        private readonly Stopwatch _aimTimer = Stopwatch.StartNew();
 
         public override void OnLoad()
         {
@@ -66,14 +68,16 @@ namespace MadDog
         {
             if(Settings.Enable)
             {
-                if (Settings.Distance.Enable)
+                if (Settings.Aimbot.Enable)
                 {
-                    DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Distance.distance.Value, 25, 2, Color.LawnGreen);
+                    DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Aimbot.Distance.Value, 25, 2, Color.LawnGreen);
                 }
                 
                 FindMonsters();
                 //RemoveMonsters();
                 DrawLineToMonster();
+
+                Aimbot();
 
             }
             
@@ -153,7 +157,7 @@ namespace MadDog
                        entity.GetComponent<Targetable>().isTargetable &&
                        entity.HasComponent<Life>() &&
                        entity.GetComponent<Life>().CurHP > 0 &&
-                       GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value &&
+                       GetDistanceFromPlayer(entity) < Settings.Aimbot.Distance.Value &&
                        GameController.Window.GetWindowRectangleTimeCache.Contains(
                            GameController.Game.IngameState.Camera.WorldToScreen(entity.Pos));
             }
@@ -167,7 +171,7 @@ namespace MadDog
         {
             foreach (var entity in _entities)
             {
-                if (GetDistanceFromPlayer(entity) > Settings.Distance.distance.Value)
+                if (GetDistanceFromPlayer(entity) > Settings.Aimbot.Distance.Value)
                 {
                     EntityRemoved(entity);
                 }
@@ -196,6 +200,31 @@ namespace MadDog
                 Graphics.DrawLine(point1, point2, 2, Color.LawnGreen);
             }
         }
+
+        private void Aimbot()
+        {
+            if(Settings.Aimbot.Enable)
+            {
+                if (Convert.ToInt32(_aimTimer.ElapsedMilliseconds) < Settings.Aimbot.AimLoopDelay.Value)
+                {
+                    _aiming = false;
+                    return;
+                }
+
+                
+                MonsterAim();
+                _aimTimer.Restart();
+                _aiming = false;
+            }
+            
+        }
+
+        private void MonsterAim()
+        {
+            Input.KeyPress(Settings.Activeskill.Value);
+        }
+
+
 
     }
 }

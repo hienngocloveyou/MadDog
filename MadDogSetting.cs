@@ -14,13 +14,13 @@ namespace MadDog
         public MadDogSetting() //test
         {
             Enable = new ToggleNode(true);
-            Distance = new UnitSettings(0x008000ff, 0);
+            Aimbot = new UnitSettings(0x008000ff, 0);
 
         }
 
         public HotkeyNode Activeskill { get; set; } = Keys.Q;
-        [Menu("Distance", 1)]
-        public UnitSettings Distance { get; set; }
+        [Menu("Aimbot", 1)]
+        public UnitSettings Aimbot { get; set; }
     }
 
     public class UnitSettings : ISettings
@@ -29,14 +29,17 @@ namespace MadDog
         public UnitSettings(uint color, uint outline)
         {
             Enable = new ToggleNode(true);
-            distance = new RangeNode<int>(100, 100, 1000);
-            
+            Distance = new RangeNode<int>(100, 100, 1000);
+            AimLoopDelay = new RangeNode<int>(124, 1, 200);
+
+
         }
 
         [Menu("Show AimRange")]
         public ToggleNode Enable { get; set; }
-        public RangeNode<int> distance { get; set; }
-        
+        public RangeNode<int> Distance { get; set; }
+        public RangeNode<int> AimLoopDelay { get; set; } 
+
 
 
 
