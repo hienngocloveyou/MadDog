@@ -32,7 +32,7 @@ namespace MadDog
 
         public override bool Initialise()
         {
-            Input.RegisterKey(Settings.Aimkey);
+            Input.RegisterKey(Keys.LButton);
 
             //ReadIgnoreFile();
 
@@ -210,7 +210,7 @@ namespace MadDog
                 if (_entities.Count > 0)
                 {
                     
-                    if (Input.IsKeyDown(Settings.Aimkey))
+                    if (Input.IsKeyDown(Keys.LButton))
                     {
                         //Input.KeyPressRelease(Settings.Activeskill.Value);
                         //MonsterAim(_entities[0]);
