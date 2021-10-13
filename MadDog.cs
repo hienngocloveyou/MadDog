@@ -77,10 +77,11 @@ namespace MadDog
                 //RemoveMonsters();
                 DrawLineToMonster();
 
-                Aimbot();
+                //Aimbot();
 
-                Input.SetCursorPos(Input.MousePosition + new Vector2(10,10));
+                //Input.SetCursorPos(Input.MousePosition + new Vector2(10,10));
 
+                Input.KeyPress(Settings.Activeskill.Value);
             }
             
             //Settings.Distance.distance.Value = (int)GetLocalPlayerPos().X;
