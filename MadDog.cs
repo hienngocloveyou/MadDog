@@ -79,7 +79,7 @@ namespace MadDog
 
                 //Aimbot();
 
-                //Input.SetCursorPos(Input.MousePosition + new Vector2(10,10));
+                Input.SetCursorPos(Input.MousePosition);
 
                 Input.KeyPress(Settings.Activeskill.Value);
             }
