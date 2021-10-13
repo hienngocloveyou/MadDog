@@ -230,7 +230,7 @@ namespace MadDog
         {
             var monster_point = camera.WorldToScreen(monster.Pos);
             Input.SetCursorPos(monster_point);
-            Input.KeyPress(Settings.Activeskill.Value);
+            Input.KeyDown(Settings.Activeskill.Value);
         }
 
 
