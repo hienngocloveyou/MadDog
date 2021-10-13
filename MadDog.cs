@@ -66,7 +66,7 @@ namespace MadDog
 
                 if (Settings.Aimbot.Enable && player.IsAlive)
                 {
-                    if (Input.IsKeyDown(Keys.LButton)
+                    if (!Input.IsKeyDown(Keys.LButton)
                    && !GameController.Game.IngameState.IngameUi.InventoryPanel.IsVisible
                    && !GameController.Game.IngameState.IngameUi.OpenLeftPanel.IsVisible)
                     {
@@ -74,7 +74,7 @@ namespace MadDog
                         yield return Attack();
                     }
 
-                    if (!Input.IsKeyDown(Keys.LButton) && _aiming == true)
+                    if (Input.IsKeyDown(Keys.LButton) && _aiming == true)
                     {
                         Input.SetCursorPos(camera.WorldToScreen(player.Pos));
                         _aiming = false;
