@@ -210,9 +210,9 @@ namespace MadDog
                 if (_entities.Count > 0)
                 {
                     
-                    if (Input.IsKeyDown(Settings.Aimkey))
+                    if (Input.IsKeyDown(Settings.Aimkey.Value))
                     {
-                        Input.KeyPressRelease(Settings.Activeskill.Value);
+                        //Input.KeyPressRelease(Settings.Activeskill.Value);
                         return;
                     }
                     else
