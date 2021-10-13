@@ -35,7 +35,7 @@ namespace MadDog
 
         }
 
-        [Menu("Show AimRange")]
+        [Menu("Enable")]
         public ToggleNode Enable { get; set; }
         public RangeNode<int> Distance { get; set; }
         public RangeNode<int> AimLoopDelay { get; set; } 

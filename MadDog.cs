@@ -203,7 +203,8 @@ namespace MadDog
 
         private void Aimbot()
         {
-            if(Settings.Aimbot.Enable)
+            MonsterAim();
+            if (Settings.Aimbot.Enable)
             {
                 if (Convert.ToInt32(_aimTimer.ElapsedMilliseconds) < Settings.Aimbot.AimLoopDelay.Value)
                 {
