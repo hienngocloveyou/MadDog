@@ -209,7 +209,7 @@ namespace MadDog
             {
                 if (_entities.Count > 0)
                 {
-                    
+                    /*
                     if (Input.IsKeyDown(1))
                     {
                         Input.KeyPressRelease(Settings.Activeskill.Value);
@@ -219,8 +219,9 @@ namespace MadDog
                     {
                         MonsterAim(_entities[0]);
                     }
-                    
-                    
+                    */
+
+                    MonsterAim(_entities[0]);
                 }
             }
             
