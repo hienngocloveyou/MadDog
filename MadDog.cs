@@ -210,7 +210,7 @@ namespace MadDog
                 if (_entities.Count > 0)
                 {
                     
-                    if (Input.IsKeyDown(1) || Input.IsKeyDown(2))
+                    if (Input.IsKeyDown(1))
                     {
                         Input.KeyPressRelease(Settings.Activeskill.Value);
                         return;
