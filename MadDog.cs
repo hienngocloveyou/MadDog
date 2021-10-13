@@ -17,9 +17,8 @@ namespace MadDog
 {
     public class MadDog : BaseSettingsPlugin<MadDogSetting>
     {
-        private bool _aiming;
+        private bool _aiming = false;
         private Vector2 monster_point;
-        private Vector2 _oldMousePos;
         private Coroutine _mainCoroutine;
         private readonly List<Entity> _entities = new List<Entity>();
         private readonly Stopwatch _aimTimer = Stopwatch.StartNew();
@@ -66,7 +65,7 @@ namespace MadDog
 
                 if (Settings.Aimbot.Enable && player.IsAlive)
                 {
-                    if (!Input.IsKeyDown(Keys.LButton)
+                    if (!Input.IsKeyDown(Keys.Q)
                    && !GameController.Game.IngameState.IngameUi.InventoryPanel.IsVisible
                    && !GameController.Game.IngameState.IngameUi.OpenLeftPanel.IsVisible)
                     {
@@ -74,7 +73,7 @@ namespace MadDog
                         yield return Attack();
                     }
 
-                    if (Input.IsKeyDown(Keys.LButton))
+                    if (Input.IsKeyDown(Keys.Q) && _aiming == true)
                     {
                         Input.SetCursorPos(camera.WorldToScreen(player.Pos));
                         _aiming = false;
@@ -250,31 +249,7 @@ namespace MadDog
         }
 
         
-        private void Aimbot()
-        { 
-            
-            
-                if (_entities.Count > 0)
-                {
-                    
-                    if (Input.IsKeyDown(Keys.LButton))
-                    {
-                        //Input.KeyPressRelease(Settings.Activeskill.Value);
-                        //MonsterAim(_entities[0]);
-                        //return;
-                    }
-                    else
-                    {
-                        MonsterAim(_entities[0]);
-                    }
-                    
-                    //MonsterAim(_entities[0]);
-
-
-                }
-            
-            
-        }
+        
 
         private void MonsterAim(Entity monster)
         {
