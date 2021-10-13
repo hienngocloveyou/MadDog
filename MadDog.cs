@@ -17,6 +17,7 @@ namespace MadDog
 {
     public class MadDog : BaseSettingsPlugin<MadDogSetting>
     {
+
         private bool _aiming;
         private readonly List<Entity> _entities = new List<Entity>();
         private readonly Stopwatch _aimTimer = Stopwatch.StartNew();
@@ -31,12 +32,11 @@ namespace MadDog
 
         public override bool Initialise()
         {
-            //Player = GameController.Player;
-            //camera = new Camera(Player, Settings);
+            Input.RegisterKey(Settings.Aimkey);
 
             //ReadIgnoreFile();
 
-            
+
             return true;
         }
 
