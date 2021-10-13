@@ -153,7 +153,7 @@ namespace MadDog
                        entity.GetComponent<Targetable>().isTargetable &&
                        entity.HasComponent<Life>() &&
                        entity.GetComponent<Life>().CurHP > 0 &&
-                       entity.DistancePlayer < Settings.Distance.distance.Value &&
+                       GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value &&
                        GameController.Window.GetWindowRectangleTimeCache.Contains(
                            GameController.Game.IngameState.Camera.WorldToScreen(entity.Pos));
             }
