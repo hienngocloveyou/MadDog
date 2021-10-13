@@ -20,12 +20,13 @@ namespace MadDog
         private bool _aiming;
         private readonly List<Entity> _entities = new List<Entity>();
         private readonly Stopwatch _aimTimer = Stopwatch.StartNew();
+        Camera camera;
 
         public override void OnLoad()
         {
             CanUseMultiThreading = true;
             //Graphics.InitImage("healthbar.png");
-            
+            camera = GameController.Game.IngameState.Camera;
         }
 
         public override bool Initialise()
@@ -77,11 +78,9 @@ namespace MadDog
                 //RemoveMonsters();
                 DrawLineToMonster();
 
-                //Aimbot();
+                Aimbot();
 
-                //Input.SetCursorPos(Input.MousePosition);
-
-                Input.KeyDown(Settings.Activeskill.Value);
+                
             }
             
             //Settings.Distance.distance.Value = (int)GetLocalPlayerPos().X;
@@ -99,7 +98,7 @@ namespace MadDog
         
         private void DrawEllipseToWorld(Vector3 vector3Pos, int radius, int points, int lineWidth, Color color)
         {
-            var camera = GameController.Game.IngameState.Camera;
+            //var camera = GameController.Game.IngameState.Camera;
             var plottedCirclePoints = new List<Vector3>();
             var slice = 2 * Math.PI / points;
             for (var i = 0; i < points; i++)
@@ -192,7 +191,7 @@ namespace MadDog
         private void DrawLineToMonster()
         {
             var player = GameController.Player;
-            var camera = GameController.Game.IngameState.Camera;
+            //var camera = GameController.Game.IngameState.Camera;
 
             Vector2 point1 = camera.WorldToScreen(player.Pos);
 
@@ -205,26 +204,29 @@ namespace MadDog
         }
 
         private void Aimbot()
-        {
-            MonsterAim();
+        {          
             if (Settings.Aimbot.Enable)
             {
-                if (Convert.ToInt32(_aimTimer.ElapsedMilliseconds) < Settings.Aimbot.AimLoopDelay.Value)
+                if (_entities.Count > 0)
                 {
-                    _aiming = false;
-                    return;
+                    if (Input.IsKeyDown(1) || Input.IsKeyDown(2))
+                    {
+                        Input.KeyPressRelease(Settings.Activeskill.Value);
+                        return;
+                    }
+                    else
+                    {
+                        MonsterAim(_entities[0]);
+                    }
                 }
-
-                
-                MonsterAim();
-                _aimTimer.Restart();
-                _aiming = false;
             }
             
         }
 
-        private void MonsterAim()
+        private void MonsterAim(Entity monster)
         {
+            var monster_point = camera.WorldToScreen(monster.Pos);
+            Input.SetCursorPos(monster_point);
             Input.KeyPress(Settings.Activeskill.Value);
         }
 
