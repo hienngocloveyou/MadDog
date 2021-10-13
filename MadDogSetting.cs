@@ -8,7 +8,7 @@ namespace MadDog
 
     public class MadDogSetting : ISettings
     {
-        [Menu("Enable")]
+        //[Menu("Enable")]
         public ToggleNode Enable { get; set; }
 
         public MadDogSetting() //test
@@ -29,11 +29,11 @@ namespace MadDog
         public UnitSettings(uint color, uint outline)
         {
             Enable = new ToggleNode(true);
-            distance = new RangeNode<int>(10, 10, 100);
+            distance = new RangeNode<int>(100, 100, 1000);
             
         }
 
-        //[Menu("Enable")]
+        [Menu("Show AimRange")]
         public ToggleNode Enable { get; set; }
         public RangeNode<int> distance { get; set; }
         
