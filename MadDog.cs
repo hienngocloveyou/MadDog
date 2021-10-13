@@ -35,7 +35,7 @@ namespace MadDog
 
         public override bool Initialise()
         {
-            Input.RegisterKey(Keys.Q);
+            Input.RegisterKey(Keys.LButton);
             //Input.RegisterKey(Settings.EnableAim.Value);
 
             //ReadIgnoreFile();
