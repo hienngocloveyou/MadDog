@@ -11,7 +11,7 @@ using ExileCore.Shared;
 using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
 using SharpDX;
-using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace MadDog
 {
@@ -209,8 +209,8 @@ namespace MadDog
             {
                 if (_entities.Count > 0)
                 {
-                    /*
-                    if (Input.IsKeyDown(Settings.Aimkey))
+                    
+                    if (Input.IsKeyDown(Keys.W))
                     {
                         //Input.KeyPressRelease(Settings.Activeskill.Value);
                         MonsterAim(_entities[0]);
@@ -220,8 +220,8 @@ namespace MadDog
                     {
                         //MonsterAim(_entities[0]);
                     }
-                    */
-                    MonsterAim(_entities[0]);
+                    
+                    //MonsterAim(_entities[0]);
 
 
 
