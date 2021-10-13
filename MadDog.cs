@@ -73,7 +73,7 @@ namespace MadDog
                 
                 FindMonsters();
                 RemoveMonsters();
-                DrawLineToMonster();
+                
             }
             
             //Settings.Distance.distance.Value = (int)GetLocalPlayerPos().X;
@@ -131,6 +131,8 @@ namespace MadDog
                     EntityAdded(entity);
                 }
             }
+
+            DrawLineToMonster();
         }
 
         private void RemoveMonsters()
