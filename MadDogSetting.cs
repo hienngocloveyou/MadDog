@@ -19,7 +19,8 @@ namespace MadDog
         }
 
         public HotkeyNode Activeskill { get; set; } = Keys.Q;
-       
+        public HotkeyNode EnableAim { get; set; } = Keys.Space;
+
         [Menu("Aimbot", 1)]
         public UnitSettings Aimbot { get; set; }
     }

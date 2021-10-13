@@ -18,16 +18,18 @@ namespace MadDog
     public class MadDog : BaseSettingsPlugin<MadDogSetting>
     {
 
-        private bool _aiming;
+        
         private readonly List<Entity> _entities = new List<Entity>();
         private readonly Stopwatch _aimTimer = Stopwatch.StartNew();
         Camera camera;
+        Entity player;
 
         public override void OnLoad()
         {
             CanUseMultiThreading = true;
             //Graphics.InitImage("healthbar.png");
             camera = GameController.Game.IngameState.Camera;
+            player = GameController.Player;
         }
 
         public override bool Initialise()
@@ -77,7 +79,7 @@ namespace MadDog
                 FindMonsters();
                 //RemoveMonsters();
                 DrawLineToMonster();
-
+                enableAim();
                 Aimbot();
 
                 
@@ -182,15 +184,14 @@ namespace MadDog
 
         private int GetDistanceFromPlayer(Entity entity)
         {
-            var p = entity.Pos;
-            var player = GameController.Player;
+            var p = entity.Pos;           
             var distance = Math.Sqrt(Math.Pow(player.Pos.X - p.X, 2) + Math.Pow(player.Pos.Y - p.Y, 2));
             return (int)distance;
         }
 
         private void DrawLineToMonster()
         {
-            var player = GameController.Player;
+            
             //var camera = GameController.Game.IngameState.Camera;
 
             Vector2 point1 = camera.WorldToScreen(player.Pos);
@@ -203,9 +204,17 @@ namespace MadDog
             }
         }
 
+        private void enableAim()
+        {
+            if (Input.IsKeyDown(Settings.EnableAim.Value))
+            {
+                Settings.Aimbot.Enable.Value = !Settings.Aimbot.Enable.Value;
+            }
+        }
         private void Aimbot()
-        {          
-            if (Settings.Aimbot.Enable)
+        { 
+            
+            if (Settings.Aimbot.Enable && player.IsAlive)
             {
                 if (_entities.Count > 0)
                 {
@@ -222,7 +231,6 @@ namespace MadDog
                     }
                     
                     //MonsterAim(_entities[0]);
-
 
 
                 }
