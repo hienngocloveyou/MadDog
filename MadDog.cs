@@ -73,7 +73,8 @@ namespace MadDog
                 
                 FindMonsters();
                 RemoveMonsters();
-                
+                DrawLineToMonster();
+
             }
             
             //Settings.Distance.distance.Value = (int)GetLocalPlayerPos().X;
@@ -128,13 +129,14 @@ namespace MadDog
             foreach (Entity entity in monster)
             //foreach (Entity entity in GameController.Entities)
             {
-                if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.HasComponent<Monster>() && entity.IsAlive)
+                if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.IsAlive)
+                //if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.HasComponent<Monster>() && entity.IsAlive)
                 {
                     EntityAdded(entity);
                 }
             }
 
-            DrawLineToMonster();
+            
         }
 
         private void RemoveMonsters()
