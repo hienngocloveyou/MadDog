@@ -213,11 +213,12 @@ namespace MadDog
                     if (Input.IsKeyDown(Settings.Aimkey.Value))
                     {
                         //Input.KeyPressRelease(Settings.Activeskill.Value);
-                        return;
+                        MonsterAim(_entities[0]);
+                        //return;
                     }
                     else
                     {
-                        MonsterAim(_entities[0]);
+                        //MonsterAim(_entities[0]);
                     }
                     
 
