@@ -76,7 +76,7 @@ namespace MadDog
 
                     if (Input.IsKeyDown(Keys.LButton) && _aiming == true)
                     {
-                        Input.SetCursorPos(camera.WorldToScreen(player.Pos + new Vector3(200,200,200)));
+                        Input.SetCursorPos(camera.WorldToScreen(player.Pos + new Vector3(1000,1000,1000)));
                         _aiming = false;
 
                     }
