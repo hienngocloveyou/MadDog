@@ -131,13 +131,36 @@ namespace MadDog
             foreach (Entity entity in GameController.Entities)
             {
                 //if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.IsAlive)
-                if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.HasComponent<Monster>() && entity.IsAlive)
+                //if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.HasComponent<Monster>() && entity.IsAlive)
+                if(ValidTarget(entity))
                 {
                     EntityAdded(entity);
                 }
             }
 
             
+        }
+        private bool ValidTarget(Entity entity)
+        {
+            try
+            {
+                return entity != null &&
+                       entity.IsValid &&
+                       entity.IsAlive &&
+                       entity.HasComponent<Monster>() &&
+                       entity.IsHostile &&
+                       entity.HasComponent<Targetable>() &&
+                       entity.GetComponent<Targetable>().isTargetable &&
+                       entity.HasComponent<Life>() &&
+                       entity.GetComponent<Life>().CurHP > 0 &&
+                       entity.DistancePlayer < Settings.Distance.distance.Value &&
+                       GameController.Window.GetWindowRectangleTimeCache.Contains(
+                           GameController.Game.IngameState.Camera.WorldToScreen(entity.Pos));
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private void RemoveMonsters()
