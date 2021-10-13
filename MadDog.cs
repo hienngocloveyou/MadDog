@@ -213,7 +213,7 @@ namespace MadDog
                     if (Input.IsKeyDown(Settings.Aimkey))
                     {
                         Input.KeyPressRelease(Settings.Activeskill.Value);
-                        //return;
+                        return;
                     }
                     else
                     {
