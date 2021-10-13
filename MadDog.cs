@@ -17,8 +17,9 @@ namespace MadDog
 {
     public class MadDog : BaseSettingsPlugin<MadDogSetting>
     {
-
-        
+        private Vector2 monster_point;
+        private Vector2 _oldMousePos;
+        private Coroutine _mainCoroutine;
         private readonly List<Entity> _entities = new List<Entity>();
         private readonly Stopwatch _aimTimer = Stopwatch.StartNew();
         Camera camera;
@@ -38,9 +39,51 @@ namespace MadDog
             //Input.RegisterKey(Settings.EnableAim.Value);
 
             //ReadIgnoreFile();
-
+            _mainCoroutine = new Coroutine(
+                MainCoroutine(),
+                this,
+                "EDC");
+            Core.ParallelRunner.Run(_mainCoroutine);
+            
+        
 
             return true;
+        }
+
+        private IEnumerator MainCoroutine()
+        {
+            while (true)
+            {
+                try
+                {
+                    
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                if (Settings.Aimbot.Enable && player.IsAlive)
+                {
+                    if (!Input.IsKeyDown(Keys.LButton)
+                   && !GameController.Game.IngameState.IngameUi.InventoryPanel.IsVisible
+                   && !GameController.Game.IngameState.IngameUi.OpenLeftPanel.IsVisible)
+                    {
+
+                        yield return Attack();
+                    }
+
+                    if (Input.IsKeyDown(Keys.LButton))
+                    {
+                        Input.SetCursorPos(camera.WorldToScreen(player.Pos));
+
+                    }
+
+                    yield return new WaitTime(10);
+                }
+                   
+            }
+            // ReSharper disable once IteratorNeverReturns
         }
 
         private void ReadIgnoreFile()
@@ -80,8 +123,7 @@ namespace MadDog
                 FindMonsters();
                 //RemoveMonsters();
                 DrawLineToMonster();
-                enableAim();
-                Aimbot();
+                
 
                 
             }
@@ -205,18 +247,11 @@ namespace MadDog
             }
         }
 
-        private void enableAim()
-        {
-            //if (Input.IsKeyDown(Settings.EnableAim.Value))
-            //{
-                //Settings.Aimbot.Enable.Value = !Settings.Aimbot.Enable.Value;
-            //}
-        }
+        
         private void Aimbot()
         { 
             
-            if (Settings.Aimbot.Enable && player.IsAlive)
-            {
+            
                 if (_entities.Count > 0)
                 {
                     
@@ -235,18 +270,40 @@ namespace MadDog
 
 
                 }
-            }
+            
             
         }
 
         private void MonsterAim(Entity monster)
         {
-            var monster_point = camera.WorldToScreen(monster.Pos);
+            monster_point = camera.WorldToScreen(monster.Pos);
             Input.SetCursorPos(monster_point);
             Input.KeyPressRelease(Settings.Activeskill.Value);
         }
 
+        private IEnumerator Attack()
+        {
+            if (Settings.Aimbot.Enable && player.IsAlive)
+            {
+                if (_entities.Count > 0)
+                {
 
+                    monster_point = camera.WorldToScreen(_entities[0].Pos);
+                    Input.SetCursorPos(monster_point);
+                    yield return Input.KeyPress(Settings.Activeskill.Value);
+
+                }
+                else
+                {
+                    yield break;
+                }
+            }
+            else
+            {
+                yield break;
+            }
+            
+        }
 
     }
 }
