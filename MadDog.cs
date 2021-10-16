@@ -195,13 +195,14 @@ namespace MadDog
                         {
                             if(s.Name == "SlaveCatcherNetThrow" && s.IsUsing)
                             {
-                                DebugWindow.LogError("Yes");
-                                //Vector2 destination = actor.CurrentAction.Destination;
-                                //Entity target = actor.CurrentAction.Target;
-                                //DebugWindow.LogError(target.pos);
-                                DebugWindow.LogError(actor.CurrentAction.Skill.Name);
+                                foreach(ExileCore.PoEMemory.Components.DeployedObject obj in actor.DeployedObjects)
+                                {
+                                    Entity e = obj.Entity;
+                                    //DebugWindow.LogError(e.Name);
+                                    DrawLineTOPoint(e.Pos);
+                                }
                             }
-                            //DebugWindow.LogError(s.Name);
+                            
                         }
                         
                     }
