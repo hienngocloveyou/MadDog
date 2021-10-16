@@ -185,14 +185,19 @@ namespace MadDog
             //foreach (Entity entity in monster)
             foreach (Entity entity in GameController.Entities)
             {
-                if(entity.Type == EntityType.Monster)
+                if(entity.Type == EntityType.ControlObjects) 
                 {
                     if (entity.HasComponent<Actor>())
                     {
                         Actor actor = entity.GetComponent<Actor>();
                         foreach (ActorSkill s in actor.ActorSkills)
                         {
-                            DebugWindow.LogError(s.Name);
+                            if(s.Name == "RegurgitatorBloodProjectile" && actor.isAttacking)
+                            {
+                                Vector2 destination = actor.CurrentAction.Destination;
+                                DrawLineTOPoint(new Vector3(destination.X, destination.Y, 0));
+                            }
+                            //DebugWindow.LogError(s.Name);
                         }
                     }
                 }    
@@ -263,8 +268,23 @@ namespace MadDog
             }
         }
 
-        
-        
+        private void DrawLineTOPoint(Vector3 pt)
+
+        {
+
+            //var camera = GameController.Game.IngameState.Camera;
+
+            Vector2 point1 = camera.WorldToScreen(player.Pos);
+            Vector2 point2 = camera.WorldToScreen(pt);
+            Graphics.DrawLine(point1, point2, 2, Color.LawnGreen);
+
+
+
+
+        }
+
+
+
 
         private void MonsterAim(Entity monster)
         {
