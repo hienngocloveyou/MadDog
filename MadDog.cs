@@ -194,8 +194,9 @@ namespace MadDog
                         {
                             if(s.Name == "SlaveCatcherNetThrow" && actor.isAttacking)
                             {
-                                DebugWindow.LogError("Yes");
-                                //Vector2 destination = actor.CurrentAction.Destination;
+                                //DebugWindow.LogError("Yes");
+                                Vector2 destination = actor.CurrentAction.CastDestination;
+                                DebugWindow.LogError(destination.X.ToString());
                                 //DrawLineTOPoint(new Vector3(destination.X, destination.Y, 0));
                             }
                             //DebugWindow.LogError(s.Name);
