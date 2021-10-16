@@ -198,7 +198,7 @@ namespace MadDog
                                 foreach(ExileCore.PoEMemory.Components.DeployedObject obj in actor.DeployedObjects)
                                 {
                                     Entity e = obj.Entity;
-                                    //DebugWindow.LogError(e.Name);
+                                    DebugWindow.LogError(s.Name);
                                     DrawLineTOPoint(e.Pos);
                                 }
                             }
