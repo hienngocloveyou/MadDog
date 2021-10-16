@@ -192,7 +192,7 @@ namespace MadDog
                         Actor actor = entity.GetComponent<Actor>();
                         foreach (ActorSkill s in actor.ActorSkills)
                         {
-                            if(s.Name == "SlaveCatcherNetThrow" && s.IsAttack)
+                            if(s.Name == "SlaveCatcherNetThrow" && actor.isAttacking)
                             {
                                 DebugWindow.LogError("Yes");
                                 //Vector2 destination = actor.CurrentAction.Destination;
