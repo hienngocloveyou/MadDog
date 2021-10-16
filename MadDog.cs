@@ -192,11 +192,11 @@ namespace MadDog
                         Actor actor = entity.GetComponent<Actor>();
                         foreach (ActorSkill s in actor.ActorSkills)
                         {
-                            if(s.Name == "RegurgitatorBloodProjectile")
+                            if(s.Name == "RegurgitatorBloodProjectile" && actor.isAttacking)
                             {
-                                //DebugWindow.LogError(s.Name);
-                                Vector2 destination = actor.CurrentAction.Destination;
-                                DrawLineTOPoint(new Vector3(destination.X, destination.Y, 0));
+                                DebugWindow.LogError(s.Name);
+                                //Vector2 destination = actor.CurrentAction.Destination;
+                                //DrawLineTOPoint(new Vector3(destination.X, destination.Y, 0));
                             }
                             //DebugWindow.LogError(s.Name);
                         }
