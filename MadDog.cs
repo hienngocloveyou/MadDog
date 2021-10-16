@@ -193,13 +193,13 @@ namespace MadDog
                         Actor actor = entity.GetComponent<Actor>();
                         foreach (ActorSkill s in actor.ActorSkills)
                         {
-                            if(s.Name == "SlaveCatcherNetThrow" && actor.isAttacking)
+                            if(s.Name == "SlaveCatcherNetThrow" && s.IsUsing)
                             {
-                                //DebugWindow.LogError("Yes");
+                                DebugWindow.LogError("Yes");
                                 //Vector2 destination = actor.CurrentAction.Destination;
-                                Entity target = actor.CurrentAction.Target;
+                                //Entity target = actor.CurrentAction.Target;
                                 //DebugWindow.LogError(target.pos);
-                                DrawLineTOPoint(target.Pos);
+                                DebugWindow.LogError(actor.CurrentAction.Skill.Name);
                             }
                             //DebugWindow.LogError(s.Name);
                         }
