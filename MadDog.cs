@@ -126,7 +126,7 @@ namespace MadDog
                 
                 FindMonsters();
                 //RemoveMonsters();
-                DrawLineToMonster();
+                //DrawLineToMonster();
                 
 
                 
