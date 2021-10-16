@@ -198,7 +198,7 @@ namespace MadDog
                                 //Vector2 destination = actor.CurrentAction.Destination;
                                 //DrawLineTOPoint(new Vector3(destination.X, destination.Y, 0));
                             }
-                            DebugWindow.LogError(s.Name);
+                            //DebugWindow.LogError(s.Name);
                         }
                     }
                 }    
