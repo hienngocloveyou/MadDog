@@ -186,31 +186,26 @@ namespace MadDog
             foreach (Entity entity in GameController.Entities)
             {
                 //DebugWindow.LogError(entity.Path);
-                if (entity.Type == EntityType.Effect)
-                    //if (entity.Type == EntityType.Monster) 
+                //if (entity.Type == EntityType.Effect)
+                    if (entity.Type == EntityType.Monster) 
                 {
-                    if (entity.HasComponent<Positioned>())
+                    if (entity.HasComponent<Actor>())
                     {
-                        Positioned pos = entity.GetComponent<Positioned>();
-                        DrawLineTOPoint(new Vector3(pos.WorldPos.X, pos.WorldPos.Y,0));
-                        //Actor actor = entity.GetComponent<Actor>();
-                        //DebugWindow.LogError("yes");
-                        /*                     
+                        //Positioned pos = entity.GetComponent<Positioned>();
+                        //DrawLineTOPoint(new Vector3(pos.WorldPos.X, pos.WorldPos.Y,0));
                         Actor actor = entity.GetComponent<Actor>();
+                        //DebugWindow.LogError("yes");
+                                             
+                        //Actor actor = entity.GetComponent<Actor>();
                         foreach (ActorSkill s in actor.ActorSkills)
                         {
                             if(s.Name == "SlaveCatcherNetThrow" && s.IsUsing)
                             {
-                                foreach(ExileCore.PoEMemory.Components.DeployedObject obj in actor.DeployedObjects)
-                                {
-                                    Entity e = obj.Entity;
-                                    DebugWindow.LogError(s.Name);
-                                    DrawLineTOPoint(e.Pos);
-                                }
+                                DebugWindow.LogError("yes");
                             }
                             
                         }
-                        */
+                        
 
                     }
                 }    
