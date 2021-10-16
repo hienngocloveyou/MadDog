@@ -55,7 +55,7 @@
       <HintPath>..\..\..\..\PoeHelper\ExileCore.dll</HintPath>
     </Reference>
     <Reference Include="GameOffsets">
-      <HintPath>..\..\ExileApi-3.15.26\PoeHelper\GameOffsets.dll</HintPath>
+      <HintPath>..\..\..\..\PoeHelper\GameOffsets.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>..\..\..\..\PoeHelper\SharpDX.dll</HintPath>

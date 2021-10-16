@@ -12,6 +12,7 @@ using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
 using SharpDX;
 using System.Windows.Forms;
+using GameOffsets;
 
 namespace MadDog
 {
@@ -39,11 +40,8 @@ namespace MadDog
             //Input.RegisterKey(Settings.EnableAim.Value);
 
             //ReadIgnoreFile();
-            _mainCoroutine = new Coroutine(
-                MainCoroutine(),
-                this,
-                "EDC");
-            Core.ParallelRunner.Run(_mainCoroutine);
+            //_mainCoroutine = new Coroutine(MainCoroutine(),this,"EDC");
+            //Core.ParallelRunner.Run(_mainCoroutine);
             
         
 
@@ -187,7 +185,18 @@ namespace MadDog
             //foreach (Entity entity in monster)
             foreach (Entity entity in GameController.Entities)
             {
-                DebugWindow.LogError(entity.Path);
+                if(entity.Type == EntityType.Monster)
+                {
+                    if (entity.HasComponent<Actor>())
+                    {
+                        Actor actor = entity.GetComponent<Actor>();
+                        foreach (ActorSkill s in actor.ActorSkills)
+                        {
+                            DebugWindow.LogError(s.Name);
+                        }
+                    }
+                }    
+                
                 //if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.IsAlive)
                 //if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.HasComponent<Monster>() && entity.IsAlive)
                 if (ValidTarget(entity))
