@@ -187,9 +187,10 @@ namespace MadDog
             //foreach (Entity entity in monster)
             foreach (Entity entity in GameController.Entities)
             {
+                DebugWindow.LogError(entity.Path);
                 //if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.IsAlive)
                 //if (GetDistanceFromPlayer(entity) < Settings.Distance.distance.Value && entity.HasComponent<Monster>() && entity.IsAlive)
-                if(ValidTarget(entity))
+                if (ValidTarget(entity))
                 {
                     EntityAdded(entity);
                 }
