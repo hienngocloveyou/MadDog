@@ -12,7 +12,7 @@ using ExileCore.Shared.Enums;
 using ExileCore.Shared.Helpers;
 using SharpDX;
 using System.Windows.Forms;
-using GameOffsets;
+using static ExileCore.PoEMemory.Components.Actor;
 
 namespace MadDog
 {
@@ -190,6 +190,13 @@ namespace MadDog
                     if (entity.HasComponent<Actor>())
                     {
                         Actor actor = entity.GetComponent<Actor>();
+                        ActionWrapper act = actor.CurrentAction;
+                        if(act.Skill.Name == "SlaveCatcherNetThrow")
+                        {
+                            DebugWindow.LogError("Yes");
+                        }
+                        /*
+                        Actor actor = entity.GetComponent<Actor>();
                         foreach (ActorSkill s in actor.ActorSkills)
                         {
                             if(s.Name == "SlaveCatcherNetThrow" && actor.isAttacking)
@@ -201,6 +208,7 @@ namespace MadDog
                             }
                             //DebugWindow.LogError(s.Name);
                         }
+                        */
                     }
                 }    
                 
