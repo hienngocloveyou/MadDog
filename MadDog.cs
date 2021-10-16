@@ -185,19 +185,19 @@ namespace MadDog
             //foreach (Entity entity in monster)
             foreach (Entity entity in GameController.Entities)
             {
-                if(entity.Type == EntityType.ControlObjects) 
+                if(entity.Type == EntityType.Monster) 
                 {
                     if (entity.HasComponent<Actor>())
                     {
                         Actor actor = entity.GetComponent<Actor>();
                         foreach (ActorSkill s in actor.ActorSkills)
                         {
-                            //if(s.Name == "RegurgitatorBloodProjectile")
-                            //{
-                                DebugWindow.LogError(s.Name);
-                                //Vector2 destination = actor.CurrentAction.Destination;
-                                //DrawLineTOPoint(new Vector3(destination.X, destination.Y, 0));
-                            //}
+                            if(s.Name == "RegurgitatorBloodProjectile")
+                            {
+                                //DebugWindow.LogError(s.Name);
+                                Vector2 destination = actor.CurrentAction.Destination;
+                                DrawLineTOPoint(new Vector3(destination.X, destination.Y, 0));
+                            }
                             //DebugWindow.LogError(s.Name);
                         }
                     }
