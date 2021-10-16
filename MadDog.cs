@@ -194,10 +194,11 @@ namespace MadDog
                         {
                             if(s.Name == "RegurgitatorBloodProjectile" && actor.isAttacking)
                             {
-                                Vector2 destination = actor.CurrentAction.Destination;
-                                DrawLineTOPoint(new Vector3(destination.X, destination.Y, 0));
+                                DebugWindow.LogError(s.Name);
+                                //Vector2 destination = actor.CurrentAction.Destination;
+                                //DrawLineTOPoint(new Vector3(destination.X, destination.Y, 0));
                             }
-                            //DebugWindow.LogError(s.Name);
+                            DebugWindow.LogError(s.Name);
                         }
                     }
                 }    
