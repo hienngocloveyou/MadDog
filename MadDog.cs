@@ -191,7 +191,10 @@ namespace MadDog
                 {
                     if (entity.HasComponent<Positioned>())
                     {
-                        DebugWindow.LogError("yes");
+                        Positioned pos = entity.GetComponent<Positioned>();
+                        DrawLineTOPoint(new Vector3(pos.WorldPos.X, pos.WorldPos.Y,0));
+                        //Actor actor = entity.GetComponent<Actor>();
+                        //DebugWindow.LogError("yes");
                         /*                     
                         Actor actor = entity.GetComponent<Actor>();
                         foreach (ActorSkill s in actor.ActorSkills)
