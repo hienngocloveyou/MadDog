@@ -185,12 +185,13 @@ namespace MadDog
             //foreach (Entity entity in monster)
             foreach (Entity entity in GameController.Entities)
             {
-                DebugWindow.LogError(entity.Path);
-                if (entity.Type == EntityType.Monster) 
+                //DebugWindow.LogError(entity.Path);
+                if (entity.Type == EntityType.Effect)
+                    //if (entity.Type == EntityType.Monster) 
                 {
                     if (entity.HasComponent<Actor>())
                     {
-                        
+                        DebugWindow.LogError("yes");
                         /*                     
                         Actor actor = entity.GetComponent<Actor>();
                         foreach (ActorSkill s in actor.ActorSkills)
@@ -207,7 +208,7 @@ namespace MadDog
                             
                         }
                         */
-                        
+
                     }
                 }    
                 
