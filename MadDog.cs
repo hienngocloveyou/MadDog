@@ -199,7 +199,8 @@ namespace MadDog
                         //Actor actor = entity.GetComponent<Actor>();
                         foreach (ActorSkill s in actor.ActorSkills)
                         {
-                            if(s.Name == "SlaveCatcherNetThrow" && s.IsUsing)
+                            DebugWindow.LogError(s.Name);
+                            if (s.Name == "SlaveCatcherNetThrow" && s.IsUsing)
                             {
                                 DebugWindow.LogError("yes");
                             }
