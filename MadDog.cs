@@ -189,7 +189,7 @@ namespace MadDog
                 if (entity.Type == EntityType.Effect)
                     //if (entity.Type == EntityType.Monster) 
                 {
-                    if (entity.HasComponent<Actor>())
+                    if (entity.HasComponent<Positioned>())
                     {
                         DebugWindow.LogError("yes");
                         /*                     
