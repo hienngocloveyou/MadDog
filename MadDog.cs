@@ -221,6 +221,33 @@ namespace MadDog
 
             
         }
+
+        private void checkPlayer()
+        {
+            Entity player = GameController.Player;
+            if (player.HasComponent<Actor>())
+            {
+                
+                Actor actor = player.GetComponent<Actor>();
+                //DebugWindow.LogError("yes");
+
+                //Actor actor = entity.GetComponent<Actor>();
+                foreach (ActorSkill s in actor.ActorSkills)
+                {
+                    //DebugWindow.LogError(s.Name);
+                    if (s.IsUsing)
+                    {
+                        DebugWindow.LogError("yes");
+                        Vector2 action = actor.CurrentAction.Destination;
+                        DebugWindow.LogError(action.X.ToString());
+                    }
+
+                }
+
+
+            }
+
+        }
         private bool ValidTarget(Entity entity)
         {
             try
