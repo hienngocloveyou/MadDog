@@ -123,13 +123,15 @@ namespace MadDog
                 {
                     DrawEllipseToWorld(GetLocalPlayerPos(), Settings.Aimbot.Distance.Value, 25, 2, Color.LawnGreen);
                 }
-                
-                FindMonsters();
+
+                //FindMonsters();
                 //RemoveMonsters();
                 //DrawLineToMonster();
-                
+                checkPlayer();
 
-                
+
+
+
             }
             
             //Settings.Distance.distance.Value = (int)GetLocalPlayerPos().X;
